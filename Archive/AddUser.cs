@@ -19,6 +19,7 @@ namespace Archive
             InitializeComponent();
         }
 
+        //ユーザー登録画面(Test)
         private void userAddButton_Click(object sender, EventArgs e)
         {
             string userId = this.user_id.Text;
