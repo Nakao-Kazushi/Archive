@@ -19,7 +19,7 @@ namespace Archive
             InitializeComponent();
         }
 
-        //ユーザー
+        //ユーザー(中尾)
         private void userAddButton_Click(object sender, EventArgs e)
         {
             string userId = this.user_id.Text;
