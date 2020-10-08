@@ -30,11 +30,11 @@ namespace Archive
             }
             else
             {
-                MessageBox.Show("ERROR : パスワードは2つ同じものを入力してください。");
+                MessageBox.Show("ERROR : パスワードは2箇所同じものを入力してください。");
             }
 
             //DBに接続する処理
-            string sLogin = "server=localhost; database = books; userid=root; password=Oneok0927;";
+            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 

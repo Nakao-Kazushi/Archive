@@ -22,12 +22,13 @@ namespace Archive
 
             //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
             editGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
         }
 
         private void editButton_Click(object sender, EventArgs e)
         {
             //DBに接続する処理
-            string sLogin = "server = localhost; database = books; userid = root; password = Oneok0927;";
+            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
             DataTable dt = new DataTable();
@@ -76,11 +77,6 @@ namespace Archive
                 }
             }
             MessageBox.Show("更新完了");
-        }
-
-        private void Edit_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

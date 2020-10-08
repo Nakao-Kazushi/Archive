@@ -64,7 +64,6 @@
             this.Controls.Add(this.editGridView);
             this.Name = "Edit";
             this.Text = "更新画面";
-            this.Load += new System.EventHandler(this.Edit_Load);
             ((System.ComponentModel.ISupportInitialize)(this.editGridView)).EndInit();
             this.ResumeLayout(false);
 

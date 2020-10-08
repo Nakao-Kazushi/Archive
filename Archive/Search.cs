@@ -17,7 +17,6 @@ namespace Archive
         public Search() //親Form
         {
             InitializeComponent();
-            
         }
 
         //検索結果表示画面の設定メソッド
@@ -37,6 +36,7 @@ namespace Archive
             bookListView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
+    //チェックボックスのture,false判定-----------------------------------------------------------------------------
         //CurrentCellDirtyStateChangedイベントハンドラ-1,3
         private void bookListView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
@@ -48,16 +48,8 @@ namespace Archive
         }
 
         //CellValueChangedイベントハンドラ-2
-        private void bookListView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            //列のインデックスを確認する
-            /*if (e.ColumnIndex == 0)
-            {
-                MessageBox.Show(string.Format("{0}行目のチェックボックスが{1}に変わりました。",
-                    e.RowIndex,
-                    bookListView[e.ColumnIndex, e.RowIndex].Value));
-            }*/
-        }
+        private void bookListView_CellValueChanged(object sender, DataGridViewCellEventArgs e){}
+    //---------------------------------------------------------------------------------------------------------
 
         //検索処理
         private void searchButton_Click(object sender, EventArgs e)
@@ -67,7 +59,7 @@ namespace Archive
             string book_name = this.book_name.Text;
 
             //DBに接続する処理
-            string sLogin = "server=localhost; database = books; userid=root; password=Oneok0927;";
+            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -268,7 +260,7 @@ namespace Archive
                         ed.editGridView.Rows.Add(row);
                     }
                     //各データを編集可能に設定する
-                    ed.editGridView.Columns[i].ReadOnly = false;
+                    //ed.editGridView.Columns[i].ReadOnly = false;
                 }
                 ed.editGridView.AllowUserToAddRows = false;
                 ed.editGridView.Refresh();
@@ -291,7 +283,7 @@ namespace Archive
 
         private void approvalButton_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("承認ボタン");
+            MessageBox.Show("承認ボタン");
 
             //検索画面を表示
             using (Approval a = new Approval())

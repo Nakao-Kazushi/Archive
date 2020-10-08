@@ -26,7 +26,8 @@ namespace Archive
             bool Administrator = AdministratorCheckBox.Checked;
 
             //DBに接続する処理
-            string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
+            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            //192.168.8.102
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -65,7 +66,7 @@ namespace Archive
                     if (count == 1)
                     {
                         MessageBox.Show("ログイン完了");
-
+                   
                         //検索画面を表示
                         using (Search s = new Search())
                         {

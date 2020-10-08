@@ -143,18 +143,18 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(429, 161);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(82, 15);
+            this.label7.Size = new System.Drawing.Size(52, 15);
             this.label7.TabIndex = 10;
-            this.label7.Text = "貸出開始日";
+            this.label7.Text = "貸出日";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(564, 162);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(82, 15);
+            this.label8.Size = new System.Drawing.Size(67, 15);
             this.label8.TabIndex = 11;
-            this.label8.Text = "貸出終了日";
+            this.label8.Text = "返却期日";
             // 
             // label9
             // 

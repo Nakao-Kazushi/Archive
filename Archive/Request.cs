@@ -53,10 +53,9 @@ namespace Archive
                     //MessageBox.Show("変更後の日付 : " + requestGridView.CurrentRow.Cells[e.ColumnIndex].Value);
                 }
             }
-            else
-            {
-                MessageBox.Show("「貸出開始日」または「貸出終了日」のセルを選択してください。");
-            }
+            requestGridView.Columns[1].ReadOnly = true;
+            requestGridView.Columns[2].ReadOnly = true;
+            requestGridView.Columns[5].ReadOnly = true;
         }
 
         //dataTimePickerの値が変更されたら呼出し
@@ -81,9 +80,8 @@ namespace Archive
             DateTime dtn = DateTime.Now;
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
-
             //DBに接続する処理
-            string sLogin = "server = localhost; database = books; userid = root; password = Oneok0927;";
+            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
             DataTable dt = new DataTable();
