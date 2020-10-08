@@ -13,6 +13,7 @@ namespace Archive
 {
     public partial class Add : Form
     {
+        //changeB　変更
         //更新テスト、更新テスト（谷）1620　更新テスト（谷）1621
 
         //コンストラクタ
