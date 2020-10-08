@@ -24,6 +24,7 @@ namespace Archive
             requestGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
+
         //requestGridViewのセルがクリックされたときの処理
         private void requestGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {

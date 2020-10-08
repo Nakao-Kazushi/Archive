@@ -148,6 +148,7 @@ namespace Archive
                 MessageBox.Show("ERROR: " + me.Message);
             }
 
+
             //☑以外を読み取り専用にする
             bookListView.Columns[1].ReadOnly = true;
             bookListView.Columns[2].ReadOnly = true;
