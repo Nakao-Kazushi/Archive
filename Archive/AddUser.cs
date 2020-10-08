@@ -13,7 +13,7 @@ namespace Archive
 {
     public partial class AddUser : Form
     {
-        //谷更新
+        //谷更新１
         public AddUser()
         {
             InitializeComponent();
