@@ -14,6 +14,7 @@ namespace Archive
 {
     public partial class Search : Form
     {
+        //BがSearchを変更（１）
         　 
         public Search() //親Form
         {
