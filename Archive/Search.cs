@@ -14,7 +14,7 @@ namespace Archive
 {
     public partial class Search : Form
     {
-        //この行を更新します　
+        　
         public Search() //親Form
         {
             InitializeComponent();
