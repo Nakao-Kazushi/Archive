@@ -16,7 +16,7 @@ namespace Archive
         //CがAddを変更
         //AがAddを変更（１）
         //Cがaddを変更
-
+        //2が変更
         //コンストラクタ
         //Add.Designer.csのメソッド呼出し、イベントを作成する。
         public Add() 
