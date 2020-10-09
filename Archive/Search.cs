@@ -14,9 +14,7 @@ namespace Archive
 {
     public partial class Search : Form
     {
-        //changeA変更する
-        //更新テスト２（谷）
-        //更新テスト３（谷）
+
         public Search() //親Form
         {
             InitializeComponent();
@@ -39,7 +37,7 @@ namespace Archive
             bookListView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
-    //チェックボックスのture,false判定-----------------------------------------------------------------------------
+        //チェックボックスのture,false判定-----------------------------------------------------------------------------
         //CurrentCellDirtyStateChangedイベントハンドラ-1,3
         private void bookListView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
@@ -51,8 +49,8 @@ namespace Archive
         }
 
         //CellValueChangedイベントハンドラ-2
-        private void bookListView_CellValueChanged(object sender, DataGridViewCellEventArgs e){}
-    //---------------------------------------------------------------------------------------------------------
+        private void bookListView_CellValueChanged(object sender, DataGridViewCellEventArgs e) { }
+        //---------------------------------------------------------------------------------------------------------
 
         //検索処理
         private void searchButton_Click(object sender, EventArgs e)
@@ -203,7 +201,7 @@ namespace Archive
                             //セルの値を1つずつコピーする
                             row.Cells[intColIndex].Value = cell.Value;
                             //MessageBox.Show("row.Cells[intColIndex].Value : " + row.Cells[intColIndex].Value);
-            
+
                             intColIndex++;
                             //MessageBox.Show("リスト追加 " + intColIndex);
                         }
@@ -223,7 +221,7 @@ namespace Archive
 
             //更新用画面を表示
             using (Edit ed = new Edit())
-            {               
+            {
                 //申請画面に何も表示されていない場合
                 if (ed.editGridView.Columns.Count == 0)
                 {
@@ -296,6 +294,17 @@ namespace Archive
             }
         }
 
+        private void AdduserButton_Click(object sender, EventArgs e)
+        {
+            //ユーザー登録画面を表示
+            using (AddUser a = new AddUser())
+            {
+                a.ShowDialog();     //画面表示
+                a.Dispose();        //リソースの開放
+            }
+        }
+
+        //検索画面読み込み
         private void Search_Load(object sender, EventArgs e)
         {
             adminiCheckBox.Visible = false;
@@ -307,8 +316,13 @@ namespace Archive
                 editButton.Visible = false;         //更新ボタン非表示
                 deleteButton.Visible = false;       //削除ボタン非表示
                 approvalButton.Visible = false;     //承認ボタン非表示
+                AdduserButton.Visible = false;      //ユーザー登録ボタン非表示
 
             }
-        }   
+        }
+
+        
+
+
     }
 }

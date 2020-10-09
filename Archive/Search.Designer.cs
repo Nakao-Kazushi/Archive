@@ -48,6 +48,7 @@
             this.approvalButton = new System.Windows.Forms.Button();
             this.adminiCheckBox = new System.Windows.Forms.CheckBox();
             this.addButton = new System.Windows.Forms.Button();
+            this.AdduserButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.bookListView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -238,11 +239,22 @@
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
+            // AdduserButton
+            // 
+            this.AdduserButton.Location = new System.Drawing.Point(151, 388);
+            this.AdduserButton.Name = "AdduserButton";
+            this.AdduserButton.Size = new System.Drawing.Size(109, 35);
+            this.AdduserButton.TabIndex = 23;
+            this.AdduserButton.Text = "アカウント登録";
+            this.AdduserButton.UseVisualStyleBackColor = true;
+            this.AdduserButton.Click += new System.EventHandler(this.AdduserButton_Click);
+            // 
             // Search
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.AdduserButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.adminiCheckBox);
             this.Controls.Add(this.approvalButton);
@@ -294,5 +306,6 @@
         public System.Windows.Forms.Button approvalButton;
         public System.Windows.Forms.CheckBox adminiCheckBox;
         public System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button AdduserButton;
     }
 }

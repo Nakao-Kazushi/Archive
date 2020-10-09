@@ -13,13 +13,12 @@ namespace Archive
 {
     public partial class AddUser : Form
     {
-        //谷更新１
+   
         public AddUser()
         {
             InitializeComponent();
         }
 
-        //ユーザー(中尾)
         private void userAddButton_Click(object sender, EventArgs e)
         {
             string userId = this.user_id.Text;
