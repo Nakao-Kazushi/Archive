@@ -87,7 +87,7 @@ namespace Archive
             MessageBox.Show("選択した書籍の貸出申請を承認します。");
 
             //DBに接続する処理
-            string sLogin = "server=localhost; database = books; userid=root; password=Oneok0927;";
+            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
