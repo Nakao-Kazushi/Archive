@@ -21,7 +21,7 @@ namespace Archive
         {
             InitializeComponent();
         }
-
+        //Dがsearchを変更
         //検索結果表示画面の設定メソッド
         private void BookListViewSetting()
         {
