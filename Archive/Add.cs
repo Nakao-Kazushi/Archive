@@ -13,6 +13,7 @@ namespace Archive
 {
     public partial class Add : Form
     {
+        //CがAddを変更
         //AがAddを変更（１）
 
         //コンストラクタ
