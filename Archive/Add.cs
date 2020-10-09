@@ -11,13 +11,13 @@ using MySql.Data.MySqlClient;
 
 namespace Archive
 {
+    //1が変更
     public partial class Add : Form
     {
-        //changeA変更
-        //changeB　変更
-        //changeB　さらに変更
-        //更新テスト、更新テスト（谷）1620　更新テスト（谷）1621
-
+        //CがAddを変更
+        //AがAddを変更（１）
+        //Cがaddを変更
+        //2が変更
         //コンストラクタ
         //Add.Designer.csのメソッド呼出し、イベントを作成する。
         public Add() 
