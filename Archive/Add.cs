@@ -13,7 +13,7 @@ namespace Archive
 {
     public partial class Add : Form
     {
-        
+        //AがAddを変更（１）
 
         //コンストラクタ
         //Add.Designer.csのメソッド呼出し、イベントを作成する。
