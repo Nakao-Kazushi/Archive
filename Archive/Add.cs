@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 
 namespace Archive
 {
+    //1が変更
     public partial class Add : Form
     {
         //CがAddを変更
