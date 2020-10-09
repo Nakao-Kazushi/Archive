@@ -12,7 +12,6 @@ using MySql.Data.MySqlClient;
 
 namespace Archive
 {
-    //1が変更変更
     public partial class Search : Form
     {
 
