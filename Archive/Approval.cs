@@ -20,7 +20,8 @@ namespace Archive
             InitializeComponent();
 
             //DBに接続する処理
-            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -62,6 +63,13 @@ namespace Archive
             {
                 MessageBox.Show("ERROR: " + me.Message);
             }
+
+            //☑以外を読み取り専用にする
+            approvalGridView.Columns[1].ReadOnly = true;
+            approvalGridView.Columns[2].ReadOnly = true;
+            approvalGridView.Columns[3].ReadOnly = true;
+            approvalGridView.Columns[4].ReadOnly = true;
+            approvalGridView.Columns[5].ReadOnly = true;
         }
 
         //一覧表示画面の設定メソッド
@@ -84,10 +92,9 @@ namespace Archive
         //承認ボタンの処理
         private void ApprovalButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("選択した書籍の貸出申請を承認します。");
-
             //DBに接続する処理
-            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -100,6 +107,8 @@ namespace Archive
                 //チェックボックスに☑が入っているか確認
                 Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)approvalGridView.Rows[i]).Cells[0]).Value;
 
+                //MessageBox.Show("checkBox: " + checkBox);
+
                 if ((checkBox != null) && ((bool)checkBox == true))
                 {
                     //SQL文作成
@@ -107,8 +116,6 @@ namespace Archive
                                  "SET REQUEST_FLAG = '0' ," +
                                  "APPROVAL_FLAG = '1' " +
                                  "WHERE BOOK_ID = '" + approvalGridView.Rows[i].Cells[1].Value + "' ";
-
-                    MessageBox.Show("☑が入っている書籍のID : " + approvalGridView.Rows[i].Cells[1].Value);
 
                     //処理実行
                     DataTable dt = new DataTable();
@@ -129,8 +136,24 @@ namespace Archive
                     {
                         MessageBox.Show("ERROR: " + me.Message);
                     }
-                }   
+
+                    //☑以外を読み取り専用にする
+                    approvalGridView.Columns[1].ReadOnly = true;
+                    approvalGridView.Columns[2].ReadOnly = true;
+                    approvalGridView.Columns[3].ReadOnly = true;
+                    approvalGridView.Columns[4].ReadOnly = true;
+                    approvalGridView.Columns[5].ReadOnly = true;
+
+                }
+                /*else
+                {
+                    MessageBox.Show("ERROR : 貸出申請を承認する書籍を選択してください。");
+                    break;
+                }*/
+
             }
+
+            //this.Close();
         }   
     }
 }
