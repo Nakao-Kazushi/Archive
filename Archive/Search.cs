@@ -60,7 +60,7 @@ namespace Archive
             string book_name = this.book_name.Text;
 
             //DBに接続する処理
-            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -72,7 +72,7 @@ namespace Archive
             string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
-                         "WHEN RETURN_DATE > '" + DateTimeNow + "' THEN '貸出中' " +
+                         "WHEN RETURN_DATE >= '" + DateTimeNow + "' THEN '貸出中' " +
                          "ELSE ' ' END AS STATUS " +
                          "FROM books.books ";
 
@@ -159,6 +159,27 @@ namespace Archive
             //日付のフォーマット指定
             this.bookListView.Columns[3].DefaultCellStyle.Format = "yyyy/MM/dd";
             this.bookListView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
+
+            //期限切れの行を着色する
+            this.ExpiredRowsBackColorChange();                     
+        }
+
+        //期限切れの行を着色する
+        private void ExpiredRowsBackColorChange()
+        {
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                if (this.bookListView.Rows[i].Cells[5].Value?.ToString() == "期限切れ")
+                {
+                    bookListView.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
+                }
+            }
+        }
+
+        //ソート完了時の処理
+        private void BookListView_Sorted(object sender, EventArgs e)
+        {
+            ExpiredRowsBackColorChange();
         }
 
         //申請処理
@@ -217,6 +238,23 @@ namespace Archive
 
         private void editButton_Click(object sender, EventArgs e)
         {
+            //編集画面に遷移していいか確認する
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+                
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    //貸出日、返却期日、状態がすべて空欄である場合
+                    if (this.bookListView.Rows[i].Cells[3].Value?.ToString() == "" && this.bookListView.Rows[i].Cells[4].Value?.ToString() == "" &&
+                        this.bookListView.Rows[i].Cells[3].Value?.ToString() == "") { }
+                    else
+                    {
+                        MessageBox.Show("貸出中のため編集できません");
+                        return;
+                    }  
+                }
+            }
             MessageBox.Show("編集ボタン");
 
             //更新用画面を表示

@@ -209,6 +209,7 @@
             this.bookListView.TabIndex = 19;
             this.bookListView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.bookListView_CellValueChanged);
             this.bookListView.CurrentCellDirtyStateChanged += new System.EventHandler(this.bookListView_CurrentCellDirtyStateChanged);
+            this.bookListView.Sorted += BookListView_Sorted;
             // 
             // approvalButton
             // 
