@@ -161,7 +161,7 @@ namespace Archive
             this.bookListView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
 
             //期限切れの行を着色する
-            this.ExpiredRowsBackColorChange();                     
+            this.ExpiredRowsBackColorChange();
         }
 
         //期限切れの行を着色する
@@ -237,25 +237,38 @@ namespace Archive
         }
 
         private void editButton_Click(object sender, EventArgs e)
-        {
-            //編集画面に遷移していいか確認する
+        {          
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行のカウント
             for (int i = 0; i < bookListView.Rows.Count; i++)
             {
                 Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
-                
+
                 if ((checkBox != null) && ((bool)checkBox == true))
                 {
-                    //貸出日、返却期日、状態がすべて空欄である場合
-                    if (this.bookListView.Rows[i].Cells[3].Value?.ToString() == "" && this.bookListView.Rows[i].Cells[4].Value?.ToString() == "" &&
-                        this.bookListView.Rows[i].Cells[3].Value?.ToString() == "") { }
-                    else
+                    Checked = true;
+
+                    //貸出日、返却期日、状態がすべて空欄でない場合
+                    if (!(this.bookListView.Rows[i].Cells[3].Value?.ToString() == "" && this.bookListView.Rows[i].Cells[4].Value?.ToString() == "" &&
+                        this.bookListView.Rows[i].Cells[3].Value?.ToString() == ""))
                     {
                         MessageBox.Show("貸出中のため編集できません");
                         return;
-                    }  
+                    }                    
                 }
             }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("１つ以上選択してください");
+                return;               
+            }
+
             MessageBox.Show("編集ボタン");
+
 
             //更新用画面を表示
             using (Edit ed = new Edit())
@@ -342,6 +355,66 @@ namespace Archive
             }
         }
 
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("削除しますか", "", MessageBoxButtons.OKCancel);
+
+            //「はい」を選んだ場合
+            if (result == DialogResult.OK)
+            {
+                string book_ids = "''";
+
+                //☑のついてるidを取得
+                for (int i = 0; i < bookListView.Rows.Count; i++)
+                {
+                    Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                    if ((checkBox != null) && ((bool)checkBox == true))
+                    {
+                        book_ids += ",'" + this.bookListView.Rows[i].Cells[1].Value?.ToString() + "'";
+                    }
+                }
+
+                //DBに接続する処理
+                string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
+
+                MySqlConnection cn = new MySqlConnection(sLogin);
+
+                //SQL文作成
+                string sql = "DELETE FROM books.books WHERE BOOK_ID IN (" + book_ids + ")";
+                              
+                //処理実行
+                DataTable dt = new DataTable();
+
+                //SQL文実行
+                MySqlCommand cmd = new MySqlCommand(sql, cn);
+
+                try
+                {
+                    //DBとの接続
+                    cmd.Connection.Open();
+
+                    //処理実行
+                    cmd.ExecuteNonQuery();
+
+                    //DBとの接続をcloseする
+                    cmd.Connection.Close();                    
+
+                    MessageBox.Show("削除完了");                            
+                }
+                catch (MySqlException me)
+                {
+                    MessageBox.Show("ERROR: " + me.Message);
+                }
+
+                //検索結果一覧を更新して表示           
+
+            }//「いいえ」を選んだ場合
+            else if(result == DialogResult.Cancel){
+                return;
+            }
+        }
+
         //検索画面読み込み
         private void Search_Load(object sender, EventArgs e)
         {
@@ -360,7 +433,5 @@ namespace Archive
         }
 
         
-
-
     }
 }
