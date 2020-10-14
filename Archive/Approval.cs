@@ -145,14 +145,12 @@ namespace Archive
                     approvalGridView.Columns[5].ReadOnly = true;
 
                 }
-                /*else
+                else
                 {
                     MessageBox.Show("ERROR : 貸出申請を承認する書籍を選択してください。");
                     break;
-                }*/
-
+                }
             }
-
             //this.Close();
         }   
     }
