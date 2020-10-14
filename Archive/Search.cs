@@ -60,7 +60,7 @@ namespace Archive
             string book_name = this.book_name.Text;
 
             //DBに接続する処理
-            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -72,7 +72,7 @@ namespace Archive
             string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
-                         "WHEN RETURN_DATE > '" + DateTimeNow + "' THEN '貸出中' " +
+                         "WHEN RETURN_DATE >= '" + DateTimeNow + "' THEN '貸出中' " +
                          "ELSE ' ' END AS STATUS " +
                          "FROM books.books ";
 
@@ -159,11 +159,61 @@ namespace Archive
             //日付のフォーマット指定
             this.bookListView.Columns[3].DefaultCellStyle.Format = "yyyy/MM/dd";
             this.bookListView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
+
+            //期限切れの行を着色する
+            this.ExpiredRowsBackColorChange();
+        }
+
+        //期限切れの行を着色する
+        private void ExpiredRowsBackColorChange()
+        {
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                if (this.bookListView.Rows[i].Cells[5].Value?.ToString() == "期限切れ")
+                {
+                    bookListView.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
+                }
+            }
+        }
+
+        //ソート完了時の処理
+        private void BookListView_Sorted(object sender, EventArgs e)
+        {
+            ExpiredRowsBackColorChange();
         }
 
         //申請処理
         private void requestButton_Click(object sender, EventArgs e)
         {
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行のカウント
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+
+                    //貸出日、返却期日、状態がすべて空欄でない場合
+                    if (!(this.bookListView.Rows[i].Cells[3].Value?.ToString() == "" && this.bookListView.Rows[i].Cells[4].Value?.ToString() == "" &&
+                        this.bookListView.Rows[i].Cells[3].Value?.ToString() == ""))
+                    {
+                        MessageBox.Show("貸出中のため申請できません");
+                        return;
+                    }
+                }
+            }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("１つ以上選択してください");
+                return;
+            }
+
             MessageBox.Show("申請画面表示します。");
 
             //申請用画面を表示
@@ -217,7 +267,37 @@ namespace Archive
 
         private void editButton_Click(object sender, EventArgs e)
         {
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行のカウント
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+
+                    //貸出日、返却期日、状態がすべて空欄でない場合
+                    if (!(this.bookListView.Rows[i].Cells[3].Value?.ToString() == "" && this.bookListView.Rows[i].Cells[4].Value?.ToString() == "" &&
+                        this.bookListView.Rows[i].Cells[3].Value?.ToString() == ""))
+                    {
+                        MessageBox.Show("貸出中のため編集できません");
+                        return;
+                    }
+                }
+            }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("１つ以上選択してください");
+                return;
+            }
+
             MessageBox.Show("編集ボタン");
+
 
             //更新用画面を表示
             using (Edit ed = new Edit())
@@ -304,6 +384,90 @@ namespace Archive
             }
         }
 
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行カウント
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+                }
+            }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("１つ以上選択してください");
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("削除しますか", "", MessageBoxButtons.OKCancel);
+
+            //「はい」を選んだ場合
+            if (result == DialogResult.OK)
+            {
+                string book_ids = "''";
+
+                //☑のついてるidを取得
+                for (int i = 0; i < bookListView.Rows.Count; i++)
+                {
+                    Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                    if ((checkBox != null) && ((bool)checkBox == true))
+                    {
+                        book_ids += ",'" + this.bookListView.Rows[i].Cells[1].Value?.ToString() + "'";
+                    }
+                }
+
+                //DBに接続する処理
+                string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
+
+                MySqlConnection cn = new MySqlConnection(sLogin);
+
+                //SQL文作成
+                string sql = "DELETE FROM books.books WHERE BOOK_ID IN (" + book_ids + ")";
+
+                //処理実行
+                DataTable dt = new DataTable();
+
+                //SQL文実行
+                MySqlCommand cmd = new MySqlCommand(sql, cn);
+
+                try
+                {
+                    //DBとの接続
+                    cmd.Connection.Open();
+
+                    //処理実行
+                    cmd.ExecuteNonQuery();
+
+                    //DBとの接続をcloseする
+                    cmd.Connection.Close();
+
+                    MessageBox.Show("削除完了");
+                }
+                catch (MySqlException me)
+                {
+                    MessageBox.Show("ERROR: " + me.Message);
+                }
+
+                //検索結果一覧を更新して表示           
+
+            }//「いいえ」を選んだ場合
+            else if (result == DialogResult.Cancel)
+            {
+                return;
+            }
+        }
+
+
+
         //検索画面読み込み
         private void Search_Load(object sender, EventArgs e)
         {
@@ -319,10 +483,6 @@ namespace Archive
                 AdduserButton.Visible = false;      //ユーザー登録ボタン非表示
 
             }
-        }
-
-        
-
-
+        }    
     }
 }
