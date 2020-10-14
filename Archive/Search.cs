@@ -185,6 +185,35 @@ namespace Archive
         //申請処理
         private void requestButton_Click(object sender, EventArgs e)
         {
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行のカウント
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+
+                    //貸出日、返却期日、状態がすべて空欄でない場合
+                    if (!(this.bookListView.Rows[i].Cells[3].Value?.ToString() == "" && this.bookListView.Rows[i].Cells[4].Value?.ToString() == "" &&
+                        this.bookListView.Rows[i].Cells[3].Value?.ToString() == ""))
+                    {
+                        MessageBox.Show("貸出中のため申請できません");
+                        return;
+                    }
+                }
+            }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("１つ以上選択してください");
+                return;
+            }
+
             MessageBox.Show("申請画面表示します。");
 
             //申請用画面を表示
@@ -237,7 +266,7 @@ namespace Archive
         }
 
         private void editButton_Click(object sender, EventArgs e)
-        {          
+        {
             //1つでも☑があるかの確認
             bool Checked = false;
 
@@ -256,7 +285,7 @@ namespace Archive
                     {
                         MessageBox.Show("貸出中のため編集できません");
                         return;
-                    }                    
+                    }
                 }
             }
 
@@ -264,7 +293,7 @@ namespace Archive
             if (!Checked)
             {
                 MessageBox.Show("１つ以上選択してください");
-                return;               
+                return;
             }
 
             MessageBox.Show("編集ボタン");
@@ -357,6 +386,27 @@ namespace Archive
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行カウント
+            for (int i = 0; i < bookListView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)bookListView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+                }
+            }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("１つ以上選択してください");
+                return;
+            }
+
             DialogResult result = MessageBox.Show("削除しますか", "", MessageBoxButtons.OKCancel);
 
             //「はい」を選んだ場合
@@ -382,7 +432,7 @@ namespace Archive
 
                 //SQL文作成
                 string sql = "DELETE FROM books.books WHERE BOOK_ID IN (" + book_ids + ")";
-                              
+
                 //処理実行
                 DataTable dt = new DataTable();
 
@@ -398,9 +448,9 @@ namespace Archive
                     cmd.ExecuteNonQuery();
 
                     //DBとの接続をcloseする
-                    cmd.Connection.Close();                    
+                    cmd.Connection.Close();
 
-                    MessageBox.Show("削除完了");                            
+                    MessageBox.Show("削除完了");
                 }
                 catch (MySqlException me)
                 {
@@ -410,10 +460,13 @@ namespace Archive
                 //検索結果一覧を更新して表示           
 
             }//「いいえ」を選んだ場合
-            else if(result == DialogResult.Cancel){
+            else if (result == DialogResult.Cancel)
+            {
                 return;
             }
         }
+
+
 
         //検索画面読み込み
         private void Search_Load(object sender, EventArgs e)
@@ -430,8 +483,6 @@ namespace Archive
                 AdduserButton.Visible = false;      //ユーザー登録ボタン非表示
 
             }
-        }
-
-        
+        }    
     }
 }
