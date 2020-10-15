@@ -340,8 +340,8 @@ namespace Archive
                         }
                         ed.editGridView.Rows.Add(row);
                     }
-                    //各データを編集可能に設定する
-                    //ed.editGridView.Columns[i].ReadOnly = false;
+                    //書籍名のみ編集可能に設定する
+                    ed.editGridView.Columns[2].ReadOnly = false;
                 }
                 ed.editGridView.AllowUserToAddRows = false;
                 ed.editGridView.Refresh();
@@ -352,7 +352,7 @@ namespace Archive
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("登録ボタン");
+            //MessageBox.Show("登録ボタン");
 
             //検索画面を表示
             using (Add add = new Add())
@@ -364,7 +364,7 @@ namespace Archive
 
         private void approvalButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("承認ボタン");
+            //MessageBox.Show("承認ボタン");
 
             //検索画面を表示
             using (Approval a = new Approval())
