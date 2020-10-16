@@ -265,6 +265,7 @@ namespace Archive
             }
         }
 
+        // 更新処理
         private void editButton_Click(object sender, EventArgs e)
         {
             //1つでも☑があるかの確認
@@ -302,10 +303,10 @@ namespace Archive
             //更新用画面を表示
             using (Edit ed = new Edit())
             {
-                //申請画面に何も表示されていない場合
+                //更新画面に何も表示されていない場合
                 if (ed.editGridView.Columns.Count == 0)
                 {
-                    //配列の中身を取り出し、申請画面用のDataGridViewに追加する
+                    //配列の中身を取り出し、更新画面用のDataGridViewに追加する
                     foreach (DataGridViewColumn dgvc in bookListView.Columns)
                     {
                         ed.editGridView.Columns.Add(dgvc.Clone() as DataGridViewColumn);
@@ -340,10 +341,31 @@ namespace Archive
                         }
                         ed.editGridView.Rows.Add(row);
                     }
-                    //書籍名のみ編集可能に設定する
-                    ed.editGridView.Columns[2].ReadOnly = false;
+                    //各データを編集可能に設定する
+                    //ed.editGridView.Columns[i].ReadOnly = false;
                 }
-                ed.editGridView.AllowUserToAddRows = false;
+                //書籍名のみ編集可能に設定する
+                ed.editGridView.Columns[2].ReadOnly = false;
+
+                // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
+                ed.editGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                ed.editGridView.Columns[0].Width = 40;
+                ed.editGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                ed.editGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                ed.editGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                ed.editGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                ed.editGridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+                // 更新画面で表示するカラム名を設定
+                ed.editGridView.Columns[0].HeaderText = "選択";
+                ed.editGridView.Columns[1].HeaderText = "書籍ID";
+                ed.editGridView.Columns[2].HeaderText = "書籍名";
+                ed.editGridView.Columns[3].HeaderText = "貸出日";
+                ed.editGridView.Columns[4].HeaderText = "返却期日";
+                ed.editGridView.Columns[5].HeaderText = "状態";
+
+                // ユーザー側の操作で行を追加できないように設定
+                ed.editGridView.AllowUserToAddRows = false;                
                 ed.editGridView.Refresh();
                 ed.ShowDialog();     //画面表示
                 ed.Dispose();        //リソースの開放
