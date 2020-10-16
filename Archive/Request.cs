@@ -51,7 +51,6 @@ namespace Archive
 
                     //選択した日付をセルに表示
                     requestGridView.CurrentRow.Cells[e.ColumnIndex].Value = dateTimePicker.Value.ToShortDateString();
-                    //MessageBox.Show("変更後の日付 : " + requestGridView.CurrentRow.Cells[e.ColumnIndex].Value);
                 }
             }
             requestGridView.Columns[1].ReadOnly = true;
@@ -111,10 +110,10 @@ namespace Archive
                         if ((!string.IsNullOrEmpty(loanDate)) && (!string.IsNullOrEmpty(returnDate)))
                         {
                             sql = "UPDATE books.books " +
-                              "SET LOAN_DATE = '" + requestGridView.Rows[i].Cells[3].Value + "' , " +
-                              "RETURN_DATE = '" + requestGridView.Rows[i].Cells[4].Value + "' , " +
-                              "REQUEST_FLAG = '1' " +
-                              "WHERE BOOK_ID = '" + bookIdList[i] + "' ";
+                                  "SET LOAN_DATE = '" + requestGridView.Rows[i].Cells[3].Value + "' , " +
+                                  "RETURN_DATE = '" + requestGridView.Rows[i].Cells[4].Value + "' , " +
+                                  "REQUEST_FLAG = '1' " +
+                                  "WHERE BOOK_ID = '" + bookIdList[i] + "' ";
 
                             //SQL文実行
                             MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);

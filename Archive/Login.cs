@@ -63,6 +63,8 @@ namespace Archive
                     int count = dt.Rows.Count;
                     //MessageBox.Show("件数 : " + count);
 
+                    MessageBox.Show(" " + dt.Rows[0][0].ToString() + " ");
+
                     if (count == 1)
                     {
                         MessageBox.Show("ログイン完了");
@@ -73,7 +75,7 @@ namespace Archive
                             //管理者の☑が入っている時
                             if (Administrator == true)
                             {
-                                MessageBox.Show("管理者");
+                                //MessageBox.Show("管理者");
                                 s.adminiCheckBox.Checked = true;
                             }
 
@@ -81,19 +83,23 @@ namespace Archive
                             s.Dispose();        //リソースの開放
                         }
                     }
+                    else if (count == 0)
+                    {
+                        MessageBox.Show("ERROR : そのユーザーは登録されていません。");
+                    }
                     else
                     {
-                        MessageBox.Show("ログイン失敗");
+                        MessageBox.Show("ERROR : ログイン失敗");
                     }   
                 }
                 catch (MySqlException me)
                 {
-                    MessageBox.Show("ERROR: " + me.Message);
+                    MessageBox.Show("ERROR : " + me.Message);
                 }
             }
             else
             {
-                MessageBox.Show("ERROR: ユーザー名またはPWが未入力です。");
+                MessageBox.Show("ERROR : ユーザー名またはPWが未入力です。");
             }
         }
     }
