@@ -45,10 +45,8 @@
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.bookListView = new System.Windows.Forms.DataGridView();
-            this.approvalButton = new System.Windows.Forms.Button();
             this.adminiCheckBox = new System.Windows.Forms.CheckBox();
             this.addButton = new System.Windows.Forms.Button();
-            this.AdduserButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.bookListView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,7 +73,7 @@
             // book_id
             // 
             this.book_id.Location = new System.Drawing.Point(131, 50);
-            this.book_id.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.book_id.Margin = new System.Windows.Forms.Padding(4);
             this.book_id.Name = "book_id";
             this.book_id.Size = new System.Drawing.Size(135, 25);
             this.book_id.TabIndex = 2;
@@ -83,7 +81,7 @@
             // book_name
             // 
             this.book_name.Location = new System.Drawing.Point(440, 50);
-            this.book_name.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.book_name.Margin = new System.Windows.Forms.Padding(4);
             this.book_name.Name = "book_name";
             this.book_name.Size = new System.Drawing.Size(148, 25);
             this.book_name.TabIndex = 3;
@@ -92,7 +90,7 @@
             // 
             this.expiredCheckBox.AutoSize = true;
             this.expiredCheckBox.Location = new System.Drawing.Point(131, 98);
-            this.expiredCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.expiredCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.expiredCheckBox.Name = "expiredCheckBox";
             this.expiredCheckBox.Size = new System.Drawing.Size(22, 21);
             this.expiredCheckBox.TabIndex = 4;
@@ -111,7 +109,7 @@
             // searchButton
             // 
             this.searchButton.Location = new System.Drawing.Point(676, 98);
-            this.searchButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.searchButton.Margin = new System.Windows.Forms.Padding(4);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(134, 44);
             this.searchButton.TabIndex = 6;
@@ -181,8 +179,8 @@
             // 
             // requestButton
             // 
-            this.requestButton.Location = new System.Drawing.Point(879, 466);
-            this.requestButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.requestButton.Location = new System.Drawing.Point(66, 466);
+            this.requestButton.Margin = new System.Windows.Forms.Padding(4);
             this.requestButton.Name = "requestButton";
             this.requestButton.Size = new System.Drawing.Size(94, 42);
             this.requestButton.TabIndex = 13;
@@ -192,8 +190,8 @@
             // 
             // editButton
             // 
-            this.editButton.Location = new System.Drawing.Point(676, 466);
-            this.editButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.editButton.Location = new System.Drawing.Point(776, 466);
+            this.editButton.Margin = new System.Windows.Forms.Padding(4);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(94, 42);
             this.editButton.TabIndex = 14;
@@ -203,8 +201,8 @@
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(778, 466);
-            this.deleteButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.deleteButton.Location = new System.Drawing.Point(878, 466);
+            this.deleteButton.Margin = new System.Windows.Forms.Padding(4);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(94, 42);
             this.deleteButton.TabIndex = 15;
@@ -217,7 +215,7 @@
             this.bookListView.AllowUserToAddRows = false;
             this.bookListView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.bookListView.Location = new System.Drawing.Point(66, 216);
-            this.bookListView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.bookListView.Margin = new System.Windows.Forms.Padding(4);
             this.bookListView.Name = "bookListView";
             this.bookListView.RowHeadersVisible = false;
             this.bookListView.RowHeadersWidth = 51;
@@ -228,22 +226,11 @@
             this.bookListView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.bookListView_CellValueChanged);
             this.bookListView.CurrentCellDirtyStateChanged += new System.EventHandler(this.bookListView_CurrentCellDirtyStateChanged);
             // 
-            // approvalButton
-            // 
-            this.approvalButton.Location = new System.Drawing.Point(66, 466);
-            this.approvalButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.approvalButton.Name = "approvalButton";
-            this.approvalButton.Size = new System.Drawing.Size(94, 42);
-            this.approvalButton.TabIndex = 20;
-            this.approvalButton.Text = "承認";
-            this.approvalButton.UseVisualStyleBackColor = true;
-            this.approvalButton.Click += new System.EventHandler(this.approvalButton_Click);
-            // 
             // adminiCheckBox
             // 
             this.adminiCheckBox.AutoSize = true;
             this.adminiCheckBox.Location = new System.Drawing.Point(34, 476);
-            this.adminiCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.adminiCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.adminiCheckBox.Name = "adminiCheckBox";
             this.adminiCheckBox.Size = new System.Drawing.Size(22, 21);
             this.adminiCheckBox.TabIndex = 21;
@@ -251,8 +238,8 @@
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(575, 466);
-            this.addButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addButton.Location = new System.Drawing.Point(675, 466);
+            this.addButton.Margin = new System.Windows.Forms.Padding(4);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(94, 42);
             this.addButton.TabIndex = 22;
@@ -260,26 +247,13 @@
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
-            // AdduserButton
-            // 
-            this.AdduserButton.Location = new System.Drawing.Point(189, 466);
-            this.AdduserButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.AdduserButton.Name = "AdduserButton";
-            this.AdduserButton.Size = new System.Drawing.Size(136, 42);
-            this.AdduserButton.TabIndex = 23;
-            this.AdduserButton.Text = "アカウント登録";
-            this.AdduserButton.UseVisualStyleBackColor = true;
-            this.AdduserButton.Click += new System.EventHandler(this.AdduserButton_Click);
-            // 
             // Search
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 540);
-            this.Controls.Add(this.AdduserButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.adminiCheckBox);
-            this.Controls.Add(this.approvalButton);
             this.Controls.Add(this.bookListView);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.editButton);
@@ -297,9 +271,9 @@
             this.Controls.Add(this.book_id);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Search";
-            this.Text = "書籍検索画面";
+            this.Text = "書籍検索画面";            
             this.Load += new System.EventHandler(this.Search_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bookListView)).EndInit();
             this.ResumeLayout(false);
@@ -326,9 +300,7 @@
         private System.Windows.Forms.DataGridView bookListView;
         public System.Windows.Forms.Button editButton;
         public System.Windows.Forms.Button deleteButton;
-        public System.Windows.Forms.Button approvalButton;
         public System.Windows.Forms.CheckBox adminiCheckBox;
         public System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Button AdduserButton;
     }
 }
