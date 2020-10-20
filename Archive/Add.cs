@@ -59,7 +59,7 @@ namespace Archive
             if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
             {              
                 //SQL文実行
-                MySqlCommand cmd = new MySqlCommand("insert into books value ('" + book_id + "','" + book_name + "',null,null,0,0)", cn);
+                MySqlCommand cmd = new MySqlCommand("insert into books value ('" + book_id + "','" + book_name + "',null,null,0,0,0)", cn);
 
                 try
                 {
@@ -73,6 +73,9 @@ namespace Archive
                     cmd.Connection.Close();
 
                     MessageBox.Show("登録完了");
+
+                    //登録画面を閉じる
+                    this.Close();
                 }
                 catch (MySqlException me)when(me.Message.Contains("Duplicate entry"))//重複エラー
                 {                    
@@ -93,12 +96,15 @@ namespace Archive
         {
             //MessageBox.Show("検索ボタン");
 
-            //検索画面を表示
-            using (Search s = new Search())
-            {
-                s.ShowDialog();     //画面表示
-                s.Dispose();        //リソースの開放
-            }
+            ////検索画面を表示
+            //using (Search s = new Search())
+            //{
+            //    s.ShowDialog();     //画面表示
+            //    s.Dispose();        //リソースの開放
+            //}
+
+            //登録ボタンを閉じる
+            this.Close();
         }       
     }
 }
