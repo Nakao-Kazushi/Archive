@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
@@ -20,6 +21,22 @@ namespace Archive
         {
             InitializeComponent();
         }
+
+        //英数字と_以外にマッチする
+        Regex reg = new Regex(@"[^0-9a-zA-Z_]");
+
+        //文字が入力されたときの処理
+        private void book_id_TextChanged(object sender, EventArgs e)
+        {
+            //カーソル位置
+            int i = this.book_id.SelectionStart;
+
+            //英数字_以外は消す
+            this.book_id.Text = reg.Replace(this.book_id.Text, "");
+
+            //カーソル位置を入力前の位置に戻す
+            this.book_id.SelectionStart = i;
+        }     
         
         //検索結果表示画面の設定メソッド
         private void BookListViewSetting()
@@ -38,7 +55,7 @@ namespace Archive
             bookListView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
-        //チェックボックスのture,false判定-----------------------------------------------------------------------------
+        //チェックボックスのtrue,false判定-----------------------------------------------------------------------------
         //CurrentCellDirtyStateChangedイベントハンドラ-1,3
         private void bookListView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
@@ -105,21 +122,45 @@ namespace Archive
             //返却期限のチェックが入ってない時の処理
             else if (expiredCheckBox.Checked == false)
             {
-                //SQL　条件分岐
-                if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                //貸出可能のチェックが入っている時の処理
+                if (canBorrowCheckBox.Checked == true)
                 {
-                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%'";
+                    if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%' AND REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_id))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'AND REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_name))
+                    {
+                        sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%' AND REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                    }
+
+                    else sql = sql + "WHERE REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                }
+                else
+                {
+                    //SQL　条件分岐
+                    if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%'";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_id))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_name))
+                    {
+                        sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
+                    }
                 }
 
-                else if (!string.IsNullOrEmpty(book_id))
-                {
-                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'";
-                }
-
-                else if (!string.IsNullOrEmpty(book_name))
-                {
-                    sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
-                }
             }
 
             //処理実行
@@ -149,6 +190,28 @@ namespace Archive
             {
                 MessageBox.Show("ERROR: " + me.Message);
             }
+            // 検索画面で表示するカラム名を設定★仮で
+            bookListView.Columns[0].HeaderText = "選択";
+            bookListView.Columns[1].HeaderText = "書籍ID";
+            bookListView.Columns[2].HeaderText = "書籍名";
+            bookListView.Columns[3].HeaderText = "貸出日";
+            bookListView.Columns[4].HeaderText = "返却期日";
+            bookListView.Columns[5].HeaderText = "状態";
+
+            // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
+            bookListView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            bookListView.Columns[0].Width = 40;
+            bookListView.Columns[3].Width = 100;
+            bookListView.Columns[4].Width = 100;
+            bookListView.Columns[5].Width = 70;
+
+            //列幅をユーザーが変更できないようにする
+            bookListView.Columns[0].Resizable = DataGridViewTriState.False;
+            bookListView.Columns[3].Resizable = DataGridViewTriState.False;
+            bookListView.Columns[4].Resizable = DataGridViewTriState.False;
+            bookListView.Columns[5].Resizable = DataGridViewTriState.False;
+            bookListView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            bookListView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 
             //☑以外を読み取り専用にする
             bookListView.Columns[1].ReadOnly = true;
@@ -162,30 +225,27 @@ namespace Archive
             this.bookListView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
 
             //期限切れの行を着色する
-            this.ExpiredRowsBackColorChange();       
+            this.ExpiredRowsBackColorChange();
 
-    } 
- 
+        }
 
-
-    //期限切れの行を着色する
-    private void ExpiredRowsBackColorChange()
-    {
-        for (int i = 0; i < bookListView.Rows.Count; i++)
+        //期限切れの行を着色する
+        private void ExpiredRowsBackColorChange()
         {
-            if (this.bookListView.Rows[i].Cells[5].Value?.ToString() == "期限切れ")
+            for (int i = 0; i < bookListView.Rows.Count; i++)
             {
-                bookListView.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
+                if (this.bookListView.Rows[i].Cells[5].Value?.ToString() == "期限切れ")
+                {
+                    bookListView.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
+                }
             }
         }
-    }
-
 
         //ソート完了時の処理
-        private void BookListView_Sorted(object sender, EventArgs e)
+        private void bookListView_Sorted(object sender, EventArgs e)
         {
             ExpiredRowsBackColorChange();
-        }
+        }        
 
         //申請処理
         private void requestButton_Click(object sender, EventArgs e)
@@ -263,11 +323,36 @@ namespace Archive
                         r.requestGridView.Rows.Add(row);
                     }
                 }
+                // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
+                r.requestGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                r.requestGridView.Columns[0].Width = 40;
+                r.requestGridView.Columns[3].Width = 100;
+                r.requestGridView.Columns[4].Width = 100;
+                r.requestGridView.Columns[5].Width = 70;
+
+                //申請画面の列幅をユーザーが変更できないようにする
+                r.requestGridView.Columns[0].Resizable = DataGridViewTriState.False;
+                r.requestGridView.Columns[3].Resizable = DataGridViewTriState.False;
+                r.requestGridView.Columns[4].Resizable = DataGridViewTriState.False;
+                r.requestGridView.Columns[5].Resizable = DataGridViewTriState.False;
+                r.requestGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                r.requestGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+                //申請画面で表示するカラム名を設定
+                r.requestGridView.Columns[0].HeaderText = "選択";
+                r.requestGridView.Columns[1].HeaderText = "書籍ID";
+                r.requestGridView.Columns[2].HeaderText = "書籍名";
+                r.requestGridView.Columns[3].HeaderText = "貸出日";
+                r.requestGridView.Columns[4].HeaderText = "返却期日";
+                r.requestGridView.Columns[5].HeaderText = "状態";
+
                 r.requestGridView.AllowUserToAddRows = false;
                 r.requestGridView.Refresh();
                 r.ShowDialog();     //画面表示
                 r.Dispose();        //リソースの開放
             }
+            //検索結果を更新           
+            updateBookListView();
         }
 
         // 更新処理
@@ -370,7 +455,7 @@ namespace Archive
                 ed.editGridView.Columns[5].HeaderText = "状態";
 
                 // ユーザー側の操作で行を追加できないように設定
-                ed.editGridView.AllowUserToAddRows = false;                
+                ed.editGridView.AllowUserToAddRows = false;
                 ed.editGridView.Refresh();
                 ed.ShowDialog();     //画面表示
                 ed.Dispose();        //リソースの開放
@@ -393,7 +478,7 @@ namespace Archive
 
             //検索結果を更新           
             updateBookListView();
-        }      
+        }
 
         //private void approvalButton_Click(object sender, EventArgs e)
         //{
@@ -480,7 +565,7 @@ namespace Archive
                     //DBとの接続をcloseする
                     cmd.Connection.Close();
 
-                    MessageBox.Show("削除完了");                   
+                    MessageBox.Show("削除完了");
                 }
                 catch (MySqlException me)
                 {
@@ -514,7 +599,7 @@ namespace Archive
 
             }
         }
-        
+
         //検索結果一覧を更新する
         private void updateBookListView()
         {
@@ -567,21 +652,45 @@ namespace Archive
             //返却期限のチェックが入ってない時の処理
             else if (expiredCheckBox.Checked == false)
             {
-                //SQL　条件分岐
-                if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                //貸出可能のチェックが入っている時の処理
+                if (canBorrowCheckBox.Checked == true)
                 {
-                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%'";
+                    if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%' AND REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_id))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'AND REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_name))
+                    {
+                        sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%' AND REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                    }
+
+                    else sql = sql + "WHERE REQUEST_FLAG = 0 AND APPROVAL_FLAG = 0";
+                }
+                else
+                {
+                    //SQL　条件分岐
+                    if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%'";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_id))
+                    {
+                        sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'";
+                    }
+
+                    else if (!string.IsNullOrEmpty(book_name))
+                    {
+                        sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
+                    }
                 }
 
-                else if (!string.IsNullOrEmpty(book_id))
-                {
-                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'";
-                }
-
-                else if (!string.IsNullOrEmpty(book_name))
-                {
-                    sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
-                }
             }
 
             //処理実行
@@ -595,8 +704,6 @@ namespace Archive
                 cn.Open();
 
                 da.Fill(dt);
-
-                //MessageBox.Show("更新完了");
 
                 //検索結果表示画面の設定メソッド実行
                 BookListViewSetting();
@@ -627,6 +734,39 @@ namespace Archive
             this.ExpiredRowsBackColorChange();
         }
 
-     
+
+        private void canBorrowcheckBox_Changed(object sender, EventArgs e)
+        {
+            //貸出可能に☑が入っている時は、期限切れのチェックボックスを操作不可   
+            if (canBorrowCheckBox.Checked == true)
+            {
+                expiredCheckBox.Enabled = false;
+            }
+
+            //☑が外れたら、☑できるようにする
+            else if (canBorrowCheckBox.Checked == false)
+            {
+                expiredCheckBox.Enabled = true;
+            }
+        }
+
+        private void expiredCheckBox_Changed(object sender, EventArgs e)
+        {
+
+            //期限切れに☑が入っている時は、貸出可能のチェックボックスを操作不可
+            if (expiredCheckBox.Checked == true)
+            {
+                canBorrowCheckBox.Enabled = false;
+            }
+
+            //☑が外れたら、☑できるようにする
+            else if (expiredCheckBox.Checked == false)
+            {
+                canBorrowCheckBox.Enabled = true;
+            }
+
+        }
+
+        
     }
 }
