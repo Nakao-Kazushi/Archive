@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace Archive
         {
             InitializeComponent();
         }
-        //Dがsearchを変更
+        
         //検索結果表示画面の設定メソッド
         private void BookListViewSetting()
         {
@@ -161,20 +162,24 @@ namespace Archive
             this.bookListView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
 
             //期限切れの行を着色する
-            this.ExpiredRowsBackColorChange();
-        }
+            this.ExpiredRowsBackColorChange();       
 
-        //期限切れの行を着色する
-        private void ExpiredRowsBackColorChange()
+    } 
+ 
+
+
+    //期限切れの行を着色する
+    private void ExpiredRowsBackColorChange()
+    {
+        for (int i = 0; i < bookListView.Rows.Count; i++)
         {
-            for (int i = 0; i < bookListView.Rows.Count; i++)
+            if (this.bookListView.Rows[i].Cells[5].Value?.ToString() == "期限切れ")
             {
-                if (this.bookListView.Rows[i].Cells[5].Value?.ToString() == "期限切れ")
-                {
-                    bookListView.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
-                }
+                bookListView.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
             }
         }
+    }
+
 
         //ソート完了時の処理
         private void BookListView_Sorted(object sender, EventArgs e)
@@ -370,8 +375,11 @@ namespace Archive
                 ed.ShowDialog();     //画面表示
                 ed.Dispose();        //リソースの開放
             }
+            //検索結果を更新           
+            updateBookListView();
         }
 
+        //登録処理
         private void addButton_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("登録ボタン");
@@ -380,31 +388,31 @@ namespace Archive
             using (Add add = new Add())
             {
                 add.ShowDialog();     //画面表示
-                add.Dispose();        //リソースの開放
+                add.Dispose();        //リソースの開放                
             }
-        }
 
-        private void approvalButton_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("承認ボタン");
+            //検索結果を更新           
+            updateBookListView();
+        }      
 
-            //検索画面を表示
-            using (Approval a = new Approval())
-            {
-                a.ShowDialog();     //画面表示
-                a.Dispose();        //リソースの開放
-            }
-        }
+        //private void approvalButton_Click(object sender, EventArgs e)
+        //{
+        //    //MessageBox.Show("承認ボタン");
 
-        private void AdduserButton_Click(object sender, EventArgs e)
-        {
-            //ユーザー登録画面を表示
-            using (AddUser a = new AddUser())
-            {
-                a.ShowDialog();     //画面表示
-                a.Dispose();        //リソースの開放
-            }
-        }
+        //    //検索画面を表示
+        //    using (Approval a = new Approval())
+        //    {
+        //        a.ShowDialog();     //画面表示
+        //        a.Dispose();        //リソースの開放
+        //    }
+        //}
+
+        //private void AdduserButton_Click(object sender, EventArgs e)
+        //{
+
+        //}
+
+        //削除処理
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
@@ -472,14 +480,14 @@ namespace Archive
                     //DBとの接続をcloseする
                     cmd.Connection.Close();
 
-                    MessageBox.Show("削除完了");
+                    MessageBox.Show("削除完了");                   
                 }
                 catch (MySqlException me)
                 {
                     MessageBox.Show("ERROR: " + me.Message);
                 }
-
-                //検索結果一覧を更新して表示           
+                //検索結果を更新                       
+                updateBookListView();
 
             }//「いいえ」を選んだ場合
             else if (result == DialogResult.Cancel)
@@ -501,10 +509,124 @@ namespace Archive
                 addButton.Visible = false;          //登録ボタン非表示
                 editButton.Visible = false;         //更新ボタン非表示
                 deleteButton.Visible = false;       //削除ボタン非表示
-                approvalButton.Visible = false;     //承認ボタン非表示
-                AdduserButton.Visible = false;      //ユーザー登録ボタン非表示
+                //approvalButton.Visible = false;     //承認ボタン非表示
+                //AdduserButton.Visible = false;      //ユーザー登録ボタン非表示
 
             }
-        }    
+        }
+        
+        //検索結果一覧を更新する
+        private void updateBookListView()
+        {
+            //TextBoxに入力した値を受け取る。
+            string book_id = this.book_id.Text;
+            string book_name = this.book_name.Text;
+
+            //DBに接続する処理
+            string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
+
+            MySqlConnection cn = new MySqlConnection(sLogin);
+
+            //現在日付取得
+            DateTime dtn = DateTime.Now;
+            string DateTimeNow = dtn.ToString("yyyy/MM/dd");
+
+            //SQL文作成
+            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
+                         "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
+                         "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
+                         "WHEN RETURN_DATE >= '" + DateTimeNow + "' THEN '貸出中' " +
+                         "ELSE ' ' END AS STATUS " +
+                         "FROM books.books ";
+
+            //返却期限切れの書籍を取り出す処理
+            if (expiredCheckBox.Checked == true)
+            {
+                //SQL　条件分岐
+                if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                {
+                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%' AND RETURN_DATE < '" + DateTimeNow + "'";
+                }
+
+                else if (!string.IsNullOrEmpty(book_id))
+                {
+                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND RETURN_DATE < '" + DateTimeNow + "'";
+                }
+
+                else if (!string.IsNullOrEmpty(book_name))
+                {
+                    sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%' AND RETURN_DATE < '" + DateTimeNow + "'";
+                }
+
+                else
+                {
+                    sql = sql + "WHERE RETURN_DATE < '" + DateTimeNow + "'";
+                }
+            }
+
+            //返却期限のチェックが入ってない時の処理
+            else if (expiredCheckBox.Checked == false)
+            {
+                //SQL　条件分岐
+                if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
+                {
+                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%' AND BOOK_NAME LIKE '%" + book_name + "%'";
+                }
+
+                else if (!string.IsNullOrEmpty(book_id))
+                {
+                    sql = sql + "WHERE BOOK_ID LIKE '" + book_id + "%'";
+                }
+
+                else if (!string.IsNullOrEmpty(book_name))
+                {
+                    sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
+                }
+            }
+
+            //処理実行
+            DataTable dt = new DataTable();
+
+            //SQL文実行
+            MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
+
+            try
+            {
+                cn.Open();
+
+                da.Fill(dt);
+
+                //MessageBox.Show("更新完了");
+
+                //検索結果表示画面の設定メソッド実行
+                BookListViewSetting();
+
+                //画面表示用のDataGridViewに取得データを設定
+                bookListView.DataSource = dt;
+
+                //DBとの接続をcloseする
+                cn.Close();
+            }
+            catch (MySqlException me)
+            {
+                MessageBox.Show("ERROR: " + me.Message);
+            }
+
+            //☑以外を読み取り専用にする
+            bookListView.Columns[1].ReadOnly = true;
+            bookListView.Columns[2].ReadOnly = true;
+            bookListView.Columns[3].ReadOnly = true;
+            bookListView.Columns[4].ReadOnly = true;
+            bookListView.Columns[5].ReadOnly = true;
+
+            //日付のフォーマット指定
+            this.bookListView.Columns[3].DefaultCellStyle.Format = "yyyy/MM/dd";
+            this.bookListView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
+
+            //期限切れの行を着色する
+            this.ExpiredRowsBackColorChange();
+        }
+
+     
     }
 }
