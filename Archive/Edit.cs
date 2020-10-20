@@ -27,12 +27,39 @@ namespace Archive
 
         private void editButton_Click(object sender, EventArgs e)
         {
+            //ダイアログ表示
+            DialogResult result = MessageBox.Show("更新しますか？", "", MessageBoxButtons.OKCancel);
+
+            //「いいえ」を選んだ場合
+            if (result == DialogResult.Cancel) return;
+
             //DBに接続する処理
             //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
             string sLogin = "server=localhost; database=books; userid=root; password=Yamakyo0811@;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
             DataTable dt = new DataTable();
+
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行のカウント
+            for (int i = 0; i < editGridView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)editGridView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+                }
+            }
+
+            //1つも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("ERROR: １つ以上選択してください。");
+                return;
+            }
 
             string sql = null;
 
@@ -75,10 +102,13 @@ namespace Archive
 
                         da.Fill(dt);
 
-                        MessageBox.Show("更新完了");
+                        Console.WriteLine("更新完了");
 
                         //DBとの接続をcloseする
                         cn.Close();
+
+                        //編集画面を閉じる
+                        this.Close();
                     }
                     catch (MySqlException me)
                     {
@@ -92,6 +122,11 @@ namespace Archive
                 }
             }
 
+        }
+
+        private void returnButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
