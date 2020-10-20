@@ -70,6 +70,23 @@ namespace Archive
             approvalGridView.Columns[3].ReadOnly = true;
             approvalGridView.Columns[4].ReadOnly = true;
             approvalGridView.Columns[5].ReadOnly = true;
+
+            // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
+            approvalGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            approvalGridView.Columns[0].Width = 40;
+            approvalGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+            // 更新画面で表示するカラム名を設定
+            approvalGridView.Columns[0].HeaderText = "選択";
+            approvalGridView.Columns[1].HeaderText = "書籍ID";
+            approvalGridView.Columns[2].HeaderText = "書籍名";
+            approvalGridView.Columns[3].HeaderText = "貸出日";
+            approvalGridView.Columns[4].HeaderText = "返却期日";
+            approvalGridView.Columns[5].HeaderText = "状態";
         }
 
         //一覧表示画面の設定メソッド
@@ -87,6 +104,7 @@ namespace Archive
 
             //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
             approvalGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
         }
 
         //承認ボタンの処理
@@ -158,6 +176,22 @@ namespace Archive
                     approvalGridView.Columns[4].ReadOnly = true;
                     approvalGridView.Columns[5].ReadOnly = true;
 
+                    // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
+                    approvalGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    approvalGridView.Columns[0].Width = 40;
+                    approvalGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    approvalGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    approvalGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    approvalGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    approvalGridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+                    // 更新画面で表示するカラム名を設定
+                    approvalGridView.Columns[0].HeaderText = "選択";
+                    approvalGridView.Columns[1].HeaderText = "書籍ID";
+                    approvalGridView.Columns[2].HeaderText = "書籍名";
+                    approvalGridView.Columns[3].HeaderText = "貸出日";
+                    approvalGridView.Columns[4].HeaderText = "返却期日";
+                    approvalGridView.Columns[5].HeaderText = "状態";
                 }
             }
 
@@ -170,10 +204,16 @@ namespace Archive
             updateApprovalList();
         }
 
-        //「戻る」ボタン
-        private void returnButton_Click(object sender, EventArgs e)
+        //「検索」ボタン
+        private void SearchButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            using (Search search = new Search())
+            {
+                //管理者
+                search.adminiCheckBox.Checked = true;
+                search.ShowDialog();     //画面表示
+                search.Dispose();        //リソースの開放
+            }
         }
 
         //承認画面再表示用メソッド
@@ -232,6 +272,29 @@ namespace Archive
             approvalGridView.Columns[3].ReadOnly = true;
             approvalGridView.Columns[4].ReadOnly = true;
             approvalGridView.Columns[5].ReadOnly = true;
+
+            // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
+            approvalGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            approvalGridView.Columns[0].Width = 40;
+            approvalGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            approvalGridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+            // 更新画面で表示するカラム名を設定
+            approvalGridView.Columns[0].HeaderText = "選択";
+            approvalGridView.Columns[1].HeaderText = "書籍ID";
+            approvalGridView.Columns[2].HeaderText = "書籍名";
+            approvalGridView.Columns[3].HeaderText = "貸出日";
+            approvalGridView.Columns[4].HeaderText = "返却期日";
+            approvalGridView.Columns[5].HeaderText = "状態";
         }
+
+        private void Approval_Load(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

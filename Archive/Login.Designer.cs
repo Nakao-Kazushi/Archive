@@ -35,28 +35,40 @@
             this.UserPw = new System.Windows.Forms.Label();
             this.AdministratorCheckBox = new System.Windows.Forms.CheckBox();
             this.Administrator = new System.Windows.Forms.Label();
+            this.department = new System.Windows.Forms.Label();
+            this.UserId = new System.Windows.Forms.Label();
+            this.department_comboBox = new System.Windows.Forms.ComboBox();
+            this.user_id = new System.Windows.Forms.TextBox();
+            this.AddUserButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // user_name
             // 
-            this.user_name.Location = new System.Drawing.Point(126, 131);
+            this.user_name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.user_name.Location = new System.Drawing.Point(152, 189);
             this.user_name.Name = "user_name";
-            this.user_name.Size = new System.Drawing.Size(298, 22);
-            this.user_name.TabIndex = 6;
+            this.user_name.Size = new System.Drawing.Size(323, 22);
+            this.user_name.TabIndex = 2;
             // 
             // user_pw
             // 
-            this.user_pw.Location = new System.Drawing.Point(126, 199);
+            this.user_pw.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.user_pw.Location = new System.Drawing.Point(152, 217);
             this.user_pw.Name = "user_pw";
-            this.user_pw.Size = new System.Drawing.Size(298, 22);
-            this.user_pw.TabIndex = 7;
+            this.user_pw.Size = new System.Drawing.Size(323, 22);
+            this.user_pw.TabIndex = 3;
             // 
             // LoginButton
             // 
-            this.LoginButton.Location = new System.Drawing.Point(461, 332);
+            this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoginButton.Location = new System.Drawing.Point(486, 319);
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(75, 39);
-            this.LoginButton.TabIndex = 8;
+            this.LoginButton.TabIndex = 5;
             this.LoginButton.Text = "ログイン";
             this.LoginButton.UseVisualStyleBackColor = true;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
@@ -64,44 +76,103 @@
             // UserName
             // 
             this.UserName.AutoSize = true;
-            this.UserName.Location = new System.Drawing.Point(39, 134);
+            this.UserName.Location = new System.Drawing.Point(70, 192);
             this.UserName.Name = "UserName";
             this.UserName.Size = new System.Drawing.Size(70, 15);
-            this.UserName.TabIndex = 10;
+            this.UserName.TabIndex = 9;
             this.UserName.Text = "ユーザー名";
             // 
             // UserPw
             // 
             this.UserPw.AutoSize = true;
-            this.UserPw.Location = new System.Drawing.Point(45, 202);
+            this.UserPw.Location = new System.Drawing.Point(71, 220);
             this.UserPw.Name = "UserPw";
             this.UserPw.Size = new System.Drawing.Size(64, 15);
-            this.UserPw.TabIndex = 11;
+            this.UserPw.TabIndex = 10;
             this.UserPw.Text = "パスワード";
             // 
             // AdministratorCheckBox
             // 
             this.AdministratorCheckBox.AutoSize = true;
-            this.AdministratorCheckBox.Location = new System.Drawing.Point(126, 260);
+            this.AdministratorCheckBox.Location = new System.Drawing.Point(152, 260);
             this.AdministratorCheckBox.Name = "AdministratorCheckBox";
             this.AdministratorCheckBox.Size = new System.Drawing.Size(18, 17);
-            this.AdministratorCheckBox.TabIndex = 12;
+            this.AdministratorCheckBox.TabIndex = 4;
             this.AdministratorCheckBox.UseVisualStyleBackColor = true;
             // 
             // Administrator
             // 
             this.Administrator.AutoSize = true;
-            this.Administrator.Location = new System.Drawing.Point(51, 260);
+            this.Administrator.Location = new System.Drawing.Point(76, 260);
             this.Administrator.Name = "Administrator";
             this.Administrator.Size = new System.Drawing.Size(52, 15);
-            this.Administrator.TabIndex = 13;
+            this.Administrator.TabIndex = 11;
             this.Administrator.Text = "管理者";
+            // 
+            // department
+            // 
+            this.department.AutoSize = true;
+            this.department.Location = new System.Drawing.Point(76, 135);
+            this.department.Name = "department";
+            this.department.Size = new System.Drawing.Size(37, 15);
+            this.department.TabIndex = 7;
+            this.department.Text = "部署";
+            // 
+            // UserId
+            // 
+            this.UserId.AutoSize = true;
+            this.UserId.Location = new System.Drawing.Point(71, 164);
+            this.UserId.Name = "UserId";
+            this.UserId.Size = new System.Drawing.Size(69, 15);
+            this.UserId.TabIndex = 8;
+            this.UserId.Text = "ユーザーID";
+            // 
+            // department_comboBox
+            // 
+            this.department_comboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.department_comboBox.FormattingEnabled = true;
+            this.department_comboBox.Items.AddRange(new object[] {
+            "",
+            "BKS",
+            "ZS"});
+            this.department_comboBox.Location = new System.Drawing.Point(152, 132);
+            this.department_comboBox.Name = "department_comboBox";
+            this.department_comboBox.Size = new System.Drawing.Size(323, 23);
+            this.department_comboBox.TabIndex = 0;
+            // 
+            // user_id
+            // 
+            this.user_id.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.user_id.Location = new System.Drawing.Point(152, 161);
+            this.user_id.Name = "user_id";
+            this.user_id.Size = new System.Drawing.Size(323, 22);
+            this.user_id.TabIndex = 1;
+            // 
+            // AddUserButton
+            // 
+            this.AddUserButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddUserButton.Location = new System.Drawing.Point(486, 373);
+            this.AddUserButton.Name = "AddUserButton";
+            this.AddUserButton.Size = new System.Drawing.Size(110, 39);
+            this.AddUserButton.TabIndex = 6;
+            this.AddUserButton.Text = "アカウント登録";
+            this.AddUserButton.UseVisualStyleBackColor = true;
+            this.AddUserButton.Click += new System.EventHandler(this.AddUserButton_Click);
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 449);
+            this.ClientSize = new System.Drawing.Size(655, 468);
+            this.Controls.Add(this.AddUserButton);
+            this.Controls.Add(this.user_id);
+            this.Controls.Add(this.department_comboBox);
+            this.Controls.Add(this.UserId);
+            this.Controls.Add(this.department);
             this.Controls.Add(this.Administrator);
             this.Controls.Add(this.AdministratorCheckBox);
             this.Controls.Add(this.UserPw);
@@ -125,5 +196,10 @@
         private System.Windows.Forms.Label UserPw;
         private System.Windows.Forms.Label Administrator;
         public System.Windows.Forms.CheckBox AdministratorCheckBox;
+        private System.Windows.Forms.Label department;
+        private System.Windows.Forms.Label UserId;
+        private System.Windows.Forms.ComboBox department_comboBox;
+        private System.Windows.Forms.TextBox user_id;
+        private System.Windows.Forms.Button AddUserButton;
     }
 }

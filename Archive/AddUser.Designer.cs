@@ -44,30 +44,42 @@
             // 
             // user_id
             // 
+            this.user_id.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.user_id.Location = new System.Drawing.Point(169, 144);
             this.user_id.Name = "user_id";
-            this.user_id.Size = new System.Drawing.Size(298, 22);
+            this.user_id.Size = new System.Drawing.Size(273, 22);
             this.user_id.TabIndex = 1;
             // 
             // user_name
             // 
+            this.user_name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.user_name.Location = new System.Drawing.Point(169, 172);
             this.user_name.Name = "user_name";
-            this.user_name.Size = new System.Drawing.Size(298, 22);
+            this.user_name.Size = new System.Drawing.Size(273, 22);
             this.user_name.TabIndex = 2;
             // 
             // user_pw
             // 
+            this.user_pw.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.user_pw.Location = new System.Drawing.Point(169, 200);
             this.user_pw.Name = "user_pw";
-            this.user_pw.Size = new System.Drawing.Size(298, 22);
+            this.user_pw.Size = new System.Drawing.Size(273, 22);
             this.user_pw.TabIndex = 3;
             // 
             // user_pw2
             // 
+            this.user_pw2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.user_pw2.Location = new System.Drawing.Point(169, 228);
             this.user_pw2.Name = "user_pw2";
-            this.user_pw2.Size = new System.Drawing.Size(298, 22);
+            this.user_pw2.Size = new System.Drawing.Size(273, 22);
             this.user_pw2.TabIndex = 4;
             // 
             // UserPw2
@@ -82,7 +94,7 @@
             // UserPw
             // 
             this.UserPw.AutoSize = true;
-            this.UserPw.Location = new System.Drawing.Point(71, 203);
+            this.UserPw.Location = new System.Drawing.Point(70, 203);
             this.UserPw.Name = "UserPw";
             this.UserPw.Size = new System.Drawing.Size(64, 15);
             this.UserPw.TabIndex = 10;
@@ -108,7 +120,8 @@
             // 
             // userAddButton
             // 
-            this.userAddButton.Location = new System.Drawing.Point(424, 301);
+            this.userAddButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.userAddButton.Location = new System.Drawing.Point(429, 287);
             this.userAddButton.Name = "userAddButton";
             this.userAddButton.Size = new System.Drawing.Size(75, 41);
             this.userAddButton.TabIndex = 5;
@@ -118,7 +131,8 @@
             // 
             // returnButton
             // 
-            this.returnButton.Location = new System.Drawing.Point(518, 301);
+            this.returnButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.returnButton.Location = new System.Drawing.Point(523, 287);
             this.returnButton.Name = "returnButton";
             this.returnButton.Size = new System.Drawing.Size(75, 41);
             this.returnButton.TabIndex = 6;
@@ -128,6 +142,9 @@
             // 
             // department_comboBox
             // 
+            this.department_comboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.department_comboBox.FormattingEnabled = true;
             this.department_comboBox.Items.AddRange(new object[] {
             "",
@@ -135,11 +152,14 @@
             "ZS"});
             this.department_comboBox.Location = new System.Drawing.Point(169, 115);
             this.department_comboBox.Name = "department_comboBox";
-            this.department_comboBox.Size = new System.Drawing.Size(121, 23);
+            this.department_comboBox.Size = new System.Drawing.Size(272, 23);
             this.department_comboBox.TabIndex = 0;
             // 
             // department
             // 
+            this.department.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.department.AutoSize = true;
             this.department.Location = new System.Drawing.Point(71, 118);
             this.department.Name = "department";
@@ -151,7 +171,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(636, 412);
+            this.ClientSize = new System.Drawing.Size(641, 398);
             this.Controls.Add(this.department_comboBox);
             this.Controls.Add(this.department);
             this.Controls.Add(this.returnButton);
