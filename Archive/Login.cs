@@ -26,8 +26,8 @@ namespace Archive
             bool Administrator = AdministratorCheckBox.Checked;
 
             //DBに接続する処理
-            string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
-            
+            //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
@@ -63,11 +63,12 @@ namespace Archive
                     int count = dt.Rows.Count;
                     //MessageBox.Show("件数 : " + count);
 
-                    MessageBox.Show(" " + dt.Rows[0][0].ToString() + " ");
+                    //MessageBox.Show(" " + dt.Rows[0][0].ToString() + " ");
 
                     if (count == 1)
                     {
                         MessageBox.Show("ログイン完了");
+
                    
                         //検索画面を表示
                         using (Search s = new Search())

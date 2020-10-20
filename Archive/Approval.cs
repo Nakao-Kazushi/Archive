@@ -111,6 +111,12 @@ namespace Archive
 
                 if ((checkBox != null) && ((bool)checkBox == true))
                 {
+                    //ダイアログ表示
+                    DialogResult result = MessageBox.Show("承認しますか", "", MessageBoxButtons.OKCancel);
+
+                    //「いいえ」を選んだ場合
+                    if (result == DialogResult.Cancel) return;
+
                     //SQL文作成
                     sql = "UPDATE books.books " +
                                  "SET REQUEST_FLAG = '0' ," +
@@ -143,15 +149,20 @@ namespace Archive
                     approvalGridView.Columns[3].ReadOnly = true;
                     approvalGridView.Columns[4].ReadOnly = true;
                     approvalGridView.Columns[5].ReadOnly = true;
-
                 }
-                else
+                
+                /*else if((checkBox == null) || ((bool)checkBox == false))
                 {
                     MessageBox.Show("ERROR : 貸出申請を承認する書籍を選択してください。");
-                    break;
-                }
+                    return;
+                }*/
             }
-            //this.Close();
-        }   
+        }
+
+        //「戻る」ボタン
+        private void returnButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

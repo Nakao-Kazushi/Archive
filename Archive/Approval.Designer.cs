@@ -30,6 +30,7 @@
         {
             this.approvalGridView = new System.Windows.Forms.DataGridView();
             this.ApprovalButton = new System.Windows.Forms.Button();
+            this.returnButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.approvalGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,7 +48,7 @@
             // 
             // ApprovalButton
             // 
-            this.ApprovalButton.Location = new System.Drawing.Point(687, 354);
+            this.ApprovalButton.Location = new System.Drawing.Point(606, 359);
             this.ApprovalButton.Name = "ApprovalButton";
             this.ApprovalButton.Size = new System.Drawing.Size(75, 45);
             this.ApprovalButton.TabIndex = 1;
@@ -55,11 +56,22 @@
             this.ApprovalButton.UseVisualStyleBackColor = true;
             this.ApprovalButton.Click += new System.EventHandler(this.ApprovalButton_Click);
             // 
+            // returnButton
+            // 
+            this.returnButton.Location = new System.Drawing.Point(687, 359);
+            this.returnButton.Name = "returnButton";
+            this.returnButton.Size = new System.Drawing.Size(75, 45);
+            this.returnButton.TabIndex = 2;
+            this.returnButton.Text = "戻る";
+            this.returnButton.UseVisualStyleBackColor = true;
+            this.returnButton.Click += new System.EventHandler(this.returnButton_Click);
+            // 
             // Approval
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.returnButton);
             this.Controls.Add(this.ApprovalButton);
             this.Controls.Add(this.approvalGridView);
             this.Name = "Approval";
@@ -73,5 +85,6 @@
 
         private System.Windows.Forms.DataGridView approvalGridView;
         private System.Windows.Forms.Button ApprovalButton;
+        private System.Windows.Forms.Button returnButton;
     }
 }
