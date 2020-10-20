@@ -98,6 +98,12 @@ namespace Archive
 
             MySqlConnection cn = new MySqlConnection(sLogin);
 
+            //承認する書籍を選択するチェックボックス
+            Object checkBox = null;
+
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
             //行のカウント
             //表の書籍データ分繰り返す
             for (int i = 0; i < approvalGridView.Rows.Count; i++)
@@ -105,12 +111,14 @@ namespace Archive
                 string sql = null;
 
                 //チェックボックスに☑が入っているか確認
-                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)approvalGridView.Rows[i]).Cells[0]).Value;
+                checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)approvalGridView.Rows[i]).Cells[0]).Value;
 
                 //MessageBox.Show("checkBox: " + checkBox);
 
                 if ((checkBox != null) && ((bool)checkBox == true))
                 {
+                    Checked = true;
+
                     //ダイアログ表示
                     DialogResult result = MessageBox.Show("承認しますか", "", MessageBoxButtons.OKCancel);
 
@@ -119,9 +127,9 @@ namespace Archive
 
                     //SQL文作成
                     sql = "UPDATE books.books " +
-                                 "SET REQUEST_FLAG = '0' ," +
-                                 "APPROVAL_FLAG = '1' " +
-                                 "WHERE BOOK_ID = '" + approvalGridView.Rows[i].Cells[1].Value + "' ";
+                            "SET REQUEST_FLAG = '0' ," +
+                            "APPROVAL_FLAG = '1' " +
+                            "WHERE BOOK_ID = '" + approvalGridView.Rows[i].Cells[1].Value + "' ";
 
                     //処理実行
                     DataTable dt = new DataTable();
@@ -149,20 +157,81 @@ namespace Archive
                     approvalGridView.Columns[3].ReadOnly = true;
                     approvalGridView.Columns[4].ReadOnly = true;
                     approvalGridView.Columns[5].ReadOnly = true;
+
                 }
-                
-                /*else if((checkBox == null) || ((bool)checkBox == false))
-                {
-                    MessageBox.Show("ERROR : 貸出申請を承認する書籍を選択してください。");
-                    return;
-                }*/
             }
+
+            //1つでも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("ERROR : 貸出申請を承認する書籍を選択してください。");
+                return;
+            }
+            updateApprovalList();
         }
 
         //「戻る」ボタン
         private void returnButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        //承認画面再表示用メソッド
+        public void updateApprovalList()
+        {
+            //InitializeComponent();
+
+            //DBに接続する処理
+            //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
+            string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
+
+            MySqlConnection cn = new MySqlConnection(sLogin);
+
+            //現在日付取得
+            DateTime dtn = DateTime.Now;
+            string DateTimeNow = dtn.ToString("yyyy/MM/dd");
+
+            //SQL文作成
+            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
+                         "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
+                         "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
+                         "WHEN RETURN_DATE > '" + DateTimeNow + "' THEN '貸出中' " +
+                         "ELSE ' ' END AS STATUS " +
+                         "FROM books.books " +
+                         "WHERE REQUEST_FLAG = 1 ";
+
+            //処理実行
+            DataTable dt = new DataTable();
+
+            //SQL文実行
+            MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
+
+            try
+            {
+                cn.Open();
+
+                da.Fill(dt);
+
+                //検索結果表示画面の設定メソッド実行
+                BookListViewSetting();
+
+                //画面表示用のDataGridViewに取得データを設定
+                approvalGridView.DataSource = dt;
+
+                //DBとの接続をcloseする
+                cn.Close();
+            }
+            catch (MySqlException me)
+            {
+                MessageBox.Show("ERROR: " + me.Message);
+            }
+
+            //☑以外を読み取り専用にする
+            approvalGridView.Columns[1].ReadOnly = true;
+            approvalGridView.Columns[2].ReadOnly = true;
+            approvalGridView.Columns[3].ReadOnly = true;
+            approvalGridView.Columns[4].ReadOnly = true;
+            approvalGridView.Columns[5].ReadOnly = true;
         }
     }
 }
