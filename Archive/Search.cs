@@ -16,7 +16,6 @@ namespace Archive
 {
     public partial class Search : Form
     {
-
         public Search() //親Form
         {
             InitializeComponent();
@@ -190,7 +189,7 @@ namespace Archive
             {
                 MessageBox.Show("ERROR: " + me.Message);
             }
-            // 検索画面で表示するカラム名を設定★仮で
+            // 検索画面で表示するカラム名を設定
             bookListView.Columns[0].HeaderText = "選択";
             bookListView.Columns[1].HeaderText = "書籍ID";
             bookListView.Columns[2].HeaderText = "書籍名";

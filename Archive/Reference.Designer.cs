@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.usageStateView = new System.Windows.Forms.DataGridView();
             this.retturnButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.user_id = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.usageStateView)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -44,15 +45,17 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "利用状況照会";
             // 
-            // dataGridView1
+            // usageStateView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(44, 89);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 62;
-            this.dataGridView1.RowTemplate.Height = 27;
-            this.dataGridView1.Size = new System.Drawing.Size(906, 250);
-            this.dataGridView1.TabIndex = 1;
+            this.usageStateView.AllowUserToAddRows = false;
+            this.usageStateView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.usageStateView.Location = new System.Drawing.Point(44, 89);
+            this.usageStateView.Name = "usageStateView";
+            this.usageStateView.RowHeadersVisible = false;
+            this.usageStateView.RowHeadersWidth = 62;
+            this.usageStateView.RowTemplate.Height = 27;
+            this.usageStateView.Size = new System.Drawing.Size(906, 250);
+            this.usageStateView.TabIndex = 1;
             // 
             // retturnButton
             // 
@@ -62,6 +65,7 @@
             this.retturnButton.TabIndex = 2;
             this.retturnButton.Text = "返却";
             this.retturnButton.UseVisualStyleBackColor = true;
+            this.retturnButton.Click += new System.EventHandler(this.RetturnButton_Clicked);
             // 
             // searchButton
             // 
@@ -74,18 +78,26 @@
             this.searchButton.UseVisualStyleBackColor = true;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Clicked);
             // 
+            // user_id
+            // 
+            this.user_id.Location = new System.Drawing.Point(850, 44);
+            this.user_id.Name = "user_id";
+            this.user_id.Size = new System.Drawing.Size(100, 25);
+            this.user_id.TabIndex = 4;
+            // 
             // Reference
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 540);
+            this.Controls.Add(this.user_id);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.retturnButton);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.usageStateView);
             this.Controls.Add(this.label1);
             this.Name = "Reference";
             this.Text = "利用状況照会";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.usageStateView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,8 +106,9 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView usageStateView;
         private System.Windows.Forms.Button retturnButton;
         private System.Windows.Forms.Button searchButton;
+        public System.Windows.Forms.TextBox user_id;
     }
 }
