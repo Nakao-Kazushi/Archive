@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
@@ -18,15 +20,50 @@ namespace Archive
             InitializeComponent();
         }
 
+        //英数字と_以外にマッチする
+        Regex reg = new Regex(@"[^0-9a-zA-Z_]");
+
+        //禁則文字チェック
+        private void userIdTextChanged(object sender, EventArgs e)
+        {
+            //カーソル位置
+            int i = this.user_id.SelectionStart;
+
+            //英数字_以外は消す
+            this.user_id.Text = reg.Replace(this.user_id.Text, "");
+
+            //カーソル位置を入力前の位置に戻す
+            this.user_id.SelectionStart = i;
+
+        }
+
+        //禁則文字チェック
+        private void pwTextChanged(object sender, EventArgs e)
+        {
+            //カーソル位置
+            int i = this.user_pw.SelectionStart;
+
+            //英数字_以外は消す
+            this.user_pw.Text = reg.Replace(this.user_pw.Text, "");
+
+            //カーソル位置を入力前の位置に戻す
+            this.user_pw.SelectionStart = i;
+
+            // パスワード入力時に表示する文字の設定を切り替える
+            if (this.user_pw.PasswordChar == '\0')
+            {
+                this.user_pw.PasswordChar = '*';
+            }
+        }
+
         //一般ユーザーのログイン画面
         private void LoginButton_Click(object sender, EventArgs e)
         {
             string department = this.department_comboBox.Text;
             string userId = this.user_id.Text;
-            string userName = this.user_name.Text;
             string userPw = this.user_pw.Text;
             bool Administrator = AdministratorCheckBox.Checked;
-
+            
             //DBに接続する処理
             //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
             string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
@@ -39,10 +76,10 @@ namespace Archive
             DataTable dt = new DataTable();
 
             //SQL　条件分岐
-            if ((!string.IsNullOrEmpty(department)) && (!string.IsNullOrEmpty(userId)) && (!string.IsNullOrEmpty(userName)) && (!string.IsNullOrEmpty(userPw)))
+            if ((!string.IsNullOrEmpty(department)) && (!string.IsNullOrEmpty(userId)) && (!string.IsNullOrEmpty(userPw)))
             {
                 sql = "SELECT USER_ID FROM books.user " +
-                      "WHERE USER_ID = '" + userId + "' AND USER_NAME = '" + userName + "' AND USER_PW = '" + userPw + "' AND DEPARTMENT = '" + department + "' ";
+                      "WHERE USER_ID = '" + userId + "' AND USER_PW = '" + userPw + "' AND DEPARTMENT = '" + department + "' ";
                 
                 //管理者の☑が入っている時にSQL文に検索条件追加
                 if (Administrator == true)
@@ -60,7 +97,6 @@ namespace Archive
                     cn.Close(); //DBとの接続をcloseする
 
                     int count = dt.Rows.Count;
-                    //MessageBox.Show("件数 : " + count);
 
                     if (count == 1)
                     {
@@ -79,12 +115,13 @@ namespace Archive
                         //一般ユーザー
                         else
                         {
-                            /*//利用照会画面を表示
+                            //利用照会画面を表示
                             using (Reference reference = new Reference())
                             {
+                                //reference.user_id.Text = userId;
                                 reference.ShowDialog();     //画面表示
                                 reference.Dispose();        //リソースの開放
-                            }*/
+                            }
                         }
                     }
                     else if (count == 0)
@@ -103,7 +140,7 @@ namespace Archive
             }
             else
             {
-                Error(userId, userName, userPw, department);
+                Error(userId, userPw, department);
             }
         }
 
@@ -118,57 +155,26 @@ namespace Archive
             }
         }
 
-        public void Error(string userId, string userName, string userPw, string department)
+        public void Error(string userId, string userPw, string department)
         {
-            //部署、ユーザーID,ユーザー名,パスワードがすべて未入力の場合
-            if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userName) & string.IsNullOrEmpty(userPw))
+            //部署、ユーザーID,パスワードがすべて未入力の場合
+            if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userPw))
             {
                 MessageBox.Show("すべての必要項目を入力してください。");
             }
-            //部署以外すべて未入力の場合
-            else if (string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userName) & string.IsNullOrEmpty(userPw))
-            {
-                MessageBox.Show("必要項目を入力してください。");
-            }
-            //ユーザーID以外すべて未入力の場合
-            else if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userName) & string.IsNullOrEmpty(userPw))
-            {
-                MessageBox.Show("必要項目を入力してください。");
-            }
-            //ユーザー名以外すべて未入力の場合
-            else if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userPw))
-            {
-                MessageBox.Show("必要項目を入力してください。");
-            }
-            //パスワード以外すべて未入力の場合
-            else if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userName))
-            {
-                MessageBox.Show("必要項目を入力してください。");
-            }
+
             //2箇所未入力があったときのエラー-------------------------------------------------------------------------------------
             else if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userId))
             {
                 MessageBox.Show("部署とユーザーIDが未入力です。");
             }
-            else if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userName))
-            {
-                MessageBox.Show("部署とユーザー名が未入力です。");
-            }
             else if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userPw))
             {
                 MessageBox.Show("部署とパスワードが未入力です。");
             }
-            else if (string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userName))
-            {
-                MessageBox.Show("ユーザーIDとユーザー名が未入力です。");
-            }
             else if (string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userPw))
             {
                 MessageBox.Show("ユーザーIDとパスワードが未入力です。");
-            }
-            else if (string.IsNullOrEmpty(userName) & string.IsNullOrEmpty(userPw))
-            {
-                MessageBox.Show("ユーザー名とパスワードが未入力です。");
             }
 
             //1箇所未入力の場合-------------------------------------------------------------------------------------
@@ -180,10 +186,6 @@ namespace Archive
             {
                 MessageBox.Show("ユーザーIDが未入力です。");
             }
-            else if (string.IsNullOrEmpty(userName))
-            {
-                MessageBox.Show("ユーザー名が未入力です。");
-            }
             else if (string.IsNullOrEmpty(userPw))
             {
                 MessageBox.Show("パスワードが未入力です。");
@@ -193,6 +195,5 @@ namespace Archive
                 MessageBox.Show("必要項目を入力してください。");
             }
         }
-
     }
 }

@@ -51,6 +51,7 @@
             this.user_id.Name = "user_id";
             this.user_id.Size = new System.Drawing.Size(273, 22);
             this.user_id.TabIndex = 1;
+            this.user_id.TextChanged += new System.EventHandler(this.textChanged);
             // 
             // user_name
             // 
@@ -61,6 +62,7 @@
             this.user_name.Name = "user_name";
             this.user_name.Size = new System.Drawing.Size(273, 22);
             this.user_name.TabIndex = 2;
+            this.user_name.TextChanged += new System.EventHandler(this.textChanged);
             // 
             // user_pw
             // 
@@ -71,6 +73,7 @@
             this.user_pw.Name = "user_pw";
             this.user_pw.Size = new System.Drawing.Size(273, 22);
             this.user_pw.TabIndex = 3;
+            this.user_pw.TextChanged += new System.EventHandler(this.pwTextChanged);
             // 
             // user_pw2
             // 
@@ -81,6 +84,7 @@
             this.user_pw2.Name = "user_pw2";
             this.user_pw2.Size = new System.Drawing.Size(273, 22);
             this.user_pw2.TabIndex = 4;
+            this.user_pw2.TextChanged += new System.EventHandler(this.pwTextChanged);
             // 
             // UserPw2
             // 
@@ -145,6 +149,7 @@
             this.department_comboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.department_comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.department_comboBox.FormattingEnabled = true;
             this.department_comboBox.Items.AddRange(new object[] {
             "",

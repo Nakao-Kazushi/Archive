@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.user_name = new System.Windows.Forms.TextBox();
             this.user_pw = new System.Windows.Forms.TextBox();
             this.LoginButton = new System.Windows.Forms.Button();
-            this.UserName = new System.Windows.Forms.Label();
             this.UserPw = new System.Windows.Forms.Label();
             this.AdministratorCheckBox = new System.Windows.Forms.CheckBox();
             this.Administrator = new System.Windows.Forms.Label();
@@ -42,16 +40,6 @@
             this.AddUserButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // user_name
-            // 
-            this.user_name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.user_name.Location = new System.Drawing.Point(152, 189);
-            this.user_name.Name = "user_name";
-            this.user_name.Size = new System.Drawing.Size(323, 22);
-            this.user_name.TabIndex = 2;
-            // 
             // user_pw
             // 
             this.user_pw.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -61,6 +49,7 @@
             this.user_pw.Name = "user_pw";
             this.user_pw.Size = new System.Drawing.Size(323, 22);
             this.user_pw.TabIndex = 3;
+            this.user_pw.TextChanged += new System.EventHandler(this.pwTextChanged);
             // 
             // LoginButton
             // 
@@ -72,15 +61,6 @@
             this.LoginButton.Text = "ログイン";
             this.LoginButton.UseVisualStyleBackColor = true;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
-            // 
-            // UserName
-            // 
-            this.UserName.AutoSize = true;
-            this.UserName.Location = new System.Drawing.Point(70, 192);
-            this.UserName.Name = "UserName";
-            this.UserName.Size = new System.Drawing.Size(70, 15);
-            this.UserName.TabIndex = 9;
-            this.UserName.Text = "ユーザー名";
             // 
             // UserPw
             // 
@@ -112,7 +92,7 @@
             // department
             // 
             this.department.AutoSize = true;
-            this.department.Location = new System.Drawing.Point(76, 135);
+            this.department.Location = new System.Drawing.Point(76, 159);
             this.department.Name = "department";
             this.department.Size = new System.Drawing.Size(37, 15);
             this.department.TabIndex = 7;
@@ -121,7 +101,7 @@
             // UserId
             // 
             this.UserId.AutoSize = true;
-            this.UserId.Location = new System.Drawing.Point(71, 164);
+            this.UserId.Location = new System.Drawing.Point(71, 192);
             this.UserId.Name = "UserId";
             this.UserId.Size = new System.Drawing.Size(69, 15);
             this.UserId.TabIndex = 8;
@@ -132,12 +112,13 @@
             this.department_comboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.department_comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.department_comboBox.FormattingEnabled = true;
             this.department_comboBox.Items.AddRange(new object[] {
             "",
             "BKS",
             "ZS"});
-            this.department_comboBox.Location = new System.Drawing.Point(152, 132);
+            this.department_comboBox.Location = new System.Drawing.Point(152, 156);
             this.department_comboBox.Name = "department_comboBox";
             this.department_comboBox.Size = new System.Drawing.Size(323, 23);
             this.department_comboBox.TabIndex = 0;
@@ -147,10 +128,11 @@
             this.user_id.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.user_id.Location = new System.Drawing.Point(152, 161);
+            this.user_id.Location = new System.Drawing.Point(152, 189);
             this.user_id.Name = "user_id";
             this.user_id.Size = new System.Drawing.Size(323, 22);
             this.user_id.TabIndex = 1;
+            this.user_id.TextChanged += new System.EventHandler(this.userIdTextChanged);
             // 
             // AddUserButton
             // 
@@ -176,10 +158,8 @@
             this.Controls.Add(this.Administrator);
             this.Controls.Add(this.AdministratorCheckBox);
             this.Controls.Add(this.UserPw);
-            this.Controls.Add(this.UserName);
             this.Controls.Add(this.LoginButton);
             this.Controls.Add(this.user_pw);
-            this.Controls.Add(this.user_name);
             this.Name = "Login";
             this.Text = "ログイン画面";
             this.ResumeLayout(false);
@@ -188,11 +168,8 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox user_name;
         private System.Windows.Forms.TextBox user_pw;
         private System.Windows.Forms.Button LoginButton;
-        private System.Windows.Forms.Label UserName;
         private System.Windows.Forms.Label UserPw;
         private System.Windows.Forms.Label Administrator;
         public System.Windows.Forms.CheckBox AdministratorCheckBox;

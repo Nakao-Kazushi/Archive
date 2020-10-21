@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -16,6 +17,49 @@ namespace Archive
         public AddUser()
         {
             InitializeComponent();
+        }
+
+        //英数字と_以外にマッチする
+        Regex reg = new Regex(@"[^0-9a-zA-Z_]");
+        Regex regName = new Regex(@"[;:'0-9a-zA-Z1/* <>=#$%&{}[()]");
+
+        private void textChanged(object sender, EventArgs e)
+        {
+            //idの禁則文字チェック
+            int i = this.user_id.SelectionStart;
+            this.user_id.Text = reg.Replace(this.user_id.Text, "");
+            this.user_id.SelectionStart = i;
+
+            //nameの禁則文字チェック
+            int j = this.user_name.SelectionStart;
+            this.user_name.Text = regName.Replace(this.user_name.Text, "");
+            this.user_name.SelectionStart = j;
+        }
+
+        private void pwTextChanged(object sender, EventArgs e)
+        {
+            //pwの禁則文字チェック
+            int i = this.user_pw.SelectionStart;
+            this.user_pw.Text = reg.Replace(this.user_pw.Text, "");
+            this.user_pw.SelectionStart = i;
+
+            //pw2の禁則文字チェック
+            int j = this.user_pw2.SelectionStart;
+            this.user_pw2.Text = reg.Replace(this.user_pw2.Text, "");
+            this.user_pw2.SelectionStart = j;
+
+
+            // パスワード入力時に表示する文字の設定を切り替える
+            if (this.user_pw.PasswordChar == '\0')
+            {
+                this.user_pw.PasswordChar = '*';
+            }
+
+            // パスワード入力時に表示する文字の設定を切り替える
+            if (this.user_pw2.PasswordChar == '\0')
+            {
+                this.user_pw2.PasswordChar = '*';
+            }
         }
 
         private void userAddButton_Click(object sender, EventArgs e)
@@ -237,5 +281,7 @@ namespace Archive
         {
             department_comboBox.SelectedIndex = 0;
         }
+
+        
     }
 }
