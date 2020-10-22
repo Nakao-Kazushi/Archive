@@ -34,7 +34,6 @@ namespace Archive
 
             //カーソル位置を入力前の位置に戻す
             this.user_id.SelectionStart = i;
-
         }
 
         //禁則文字チェック
@@ -63,8 +62,7 @@ namespace Archive
             string userId = this.user_id.Text;
             string userPw = this.user_pw.Text;
             bool Administrator = AdministratorCheckBox.Checked;
-            
-            //DBに接続する処理
+
             //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
             string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
@@ -72,11 +70,9 @@ namespace Archive
 
             string sql = null;
 
-            //処理実行
             DataTable dt = new DataTable();
 
-            //SQL　条件分岐
-            if ((!string.IsNullOrEmpty(department)) && (!string.IsNullOrEmpty(userId)) && (!string.IsNullOrEmpty(userPw)))
+            if (!string.IsNullOrEmpty(department) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(userPw))
             {
                 sql = "SELECT USER_ID FROM books.user " +
                       "WHERE USER_ID = '" + userId + "' AND USER_PW = '" + userPw + "' AND DEPARTMENT = '" + department + "' ";
@@ -87,14 +83,13 @@ namespace Archive
                     sql = sql + "AND ADMINISTRATOR_FLAG = '1'";            
                 }
                 
-                //SQL文実行
                 MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
 
                 try
                 {
                     cn.Open();
                     da.Fill(dt);
-                    cn.Close(); //DBとの接続をcloseする
+                    cn.Close();
 
                     int count = dt.Rows.Count;
 
@@ -118,7 +113,7 @@ namespace Archive
                             //利用照会画面を表示
                             using (Reference reference = new Reference())
                             {
-                                //reference.user_id.Text = userId;
+                                reference.user_id.Text = userId;
                                 reference.ShowDialog();     //画面表示
                                 reference.Dispose();        //リソースの開放
                             }

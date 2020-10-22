@@ -81,7 +81,6 @@
             this.Controls.Add(this.approvalGridView);
             this.Name = "Approval";
             this.Text = "承認画面";
-            this.Load += new System.EventHandler(this.Approval_Load);
             ((System.ComponentModel.ISupportInitialize)(this.approvalGridView)).EndInit();
             this.ResumeLayout(false);
 

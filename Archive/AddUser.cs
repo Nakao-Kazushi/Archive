@@ -19,10 +19,12 @@ namespace Archive
             InitializeComponent();
         }
 
+        //SQLインジェクション対策含む
         //英数字と_以外にマッチする
         Regex reg = new Regex(@"[^0-9a-zA-Z_]");
-        Regex regName = new Regex(@"[;:'0-9a-zA-Z1/* <>=#$%&{}[()]");
+        Regex regName = new Regex(@"[0-9a-zA-Z!-~]");  //左記の文字は入力不可
 
+        //テキストボックス入力時の処理
         private void textChanged(object sender, EventArgs e)
         {
             //idの禁則文字チェック
@@ -47,7 +49,6 @@ namespace Archive
             int j = this.user_pw2.SelectionStart;
             this.user_pw2.Text = reg.Replace(this.user_pw2.Text, "");
             this.user_pw2.SelectionStart = j;
-
 
             // パスワード入力時に表示する文字の設定を切り替える
             if (this.user_pw.PasswordChar == '\0')
@@ -80,7 +81,7 @@ namespace Archive
 
                 MySqlConnection cn = new MySqlConnection(sLogin);
 
-                if ((!string.IsNullOrEmpty(department)) && (!string.IsNullOrEmpty(userId)) && (!string.IsNullOrEmpty(userName)) && (!string.IsNullOrEmpty(userPw)))
+                if (!string.IsNullOrEmpty(department) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(userPw))
                 {
 
                     //ダイアログ表示
@@ -279,6 +280,7 @@ namespace Archive
 
         private void AddUser_Load(object sender, EventArgs e)
         {
+            //「部署」の初期表示時は「空白」を表示
             department_comboBox.SelectedIndex = 0;
         }
 

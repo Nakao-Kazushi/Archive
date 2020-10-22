@@ -19,7 +19,6 @@ namespace Archive
         {
             InitializeComponent();
 
-            //DBに接続する処理
             //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
             string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
@@ -29,7 +28,6 @@ namespace Archive
             DateTime dtn = DateTime.Now;
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
-            //SQL文作成
             string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
@@ -56,7 +54,6 @@ namespace Archive
                 //画面表示用のDataGridViewに取得データを設定
                 approvalGridView.DataSource = dt;
 
-                //DBとの接続をcloseする
                 cn.Close();
             }
             catch (MySqlException me)
@@ -90,6 +87,7 @@ namespace Archive
             DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
             approvalGridView.Columns.Add(column);
 
+            //チェックボックスのセルのサイズ指定
             approvalGridView.Columns[0].FillWeight = 40;
 
             //DataGridViewの表示幅に合わせて列幅自動調整
@@ -99,7 +97,15 @@ namespace Archive
         //承認ボタンの処理
         private void ApprovalButton_Click(object sender, EventArgs e)
         {
-            //DBに接続する処理
+            //ダイアログ表示
+            DialogResult result = MessageBox.Show("承認しますか", "", MessageBoxButtons.OKCancel);
+
+            //「いいえ」を選んだ場合
+            if (result == DialogResult.Cancel)
+            {
+                return;
+            }
+
             //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
             string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
@@ -108,6 +114,8 @@ namespace Archive
             //承認する書籍を選択するチェックボックス
             Object checkBox = null;
 
+            string sql;
+
             //1つでも☑があるかの確認
             bool Checked = false;
 
@@ -115,42 +123,26 @@ namespace Archive
             //表の書籍データ分繰り返す
             for (int i = 0; i < approvalGridView.Rows.Count; i++)
             {
-                string sql = null;
 
                 //チェックボックスに☑が入っているか確認
                 checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)approvalGridView.Rows[i]).Cells[0]).Value;
 
-                //MessageBox.Show("checkBox: " + checkBox);
-
-                if ((checkBox != null) && ((bool)checkBox == true))
+                if (checkBox != null && (bool)checkBox == true)
                 {
                     Checked = true;
 
-                    //ダイアログ表示
-                    DialogResult result = MessageBox.Show("承認しますか", "", MessageBoxButtons.OKCancel);
-
-                    //「いいえ」を選んだ場合
-                    if (result == DialogResult.Cancel) return;
-
-                    //SQL文作成
                     sql = "UPDATE books.books " +
                             "SET REQUEST_FLAG = '0' ," +
                             "APPROVAL_FLAG = '1' " +
                             "WHERE BOOK_ID = '" + approvalGridView.Rows[i].Cells[1].Value + "' ";
 
-                    //処理実行
                     DataTable dt = new DataTable();
-
-                    //SQL文実行
                     MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
 
                     try
                     {
                         cn.Open();
-
                         da.Fill(dt);
-
-                        //DBとの接続をcloseする
                         cn.Close();
                     }
                     catch (MySqlException me)
@@ -199,9 +191,6 @@ namespace Archive
         //承認画面再表示用メソッド
         public void updateApprovalList()
         {
-            //InitializeComponent();
-
-            //DBに接続する処理
             //string sLogin = "server=192.168.8.102; database=books; userid=bks; password=bksbooklist;";
             string sLogin = "server=localhost; database=books; userid=root; password=Oneok0927;";
 
@@ -211,7 +200,6 @@ namespace Archive
             DateTime dtn = DateTime.Now;
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
-            //SQL文作成
             string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
@@ -238,7 +226,6 @@ namespace Archive
                 //画面表示用のDataGridViewに取得データを設定
                 approvalGridView.DataSource = dt;
 
-                //DBとの接続をcloseする
                 cn.Close();
             }
             catch (MySqlException me)
@@ -261,11 +248,5 @@ namespace Archive
             approvalGridView.Columns[4].HeaderText = "返却期日";
             approvalGridView.Columns[5].HeaderText = "状態";
         }
-
-        private void Approval_Load(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }
