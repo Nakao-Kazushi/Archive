@@ -16,9 +16,14 @@ namespace Archive
 {
     public partial class Search : Form
     {
+        //ユーザーID
+        private string userId;
         public Search() //親Form
         {
             InitializeComponent();
+
+            //user_idテキストボックスを非表示
+            this.user_id.Visible = false;
         }
 
         //英数字と_以外にマッチする
@@ -347,6 +352,9 @@ namespace Archive
 
                 r.requestGridView.AllowUserToAddRows = false;
                 r.requestGridView.Refresh();
+
+                //Request.user_id.Text = userId;//山本さんコメントを解除して使ってください！！
+
                 r.ShowDialog();     //画面表示
                 r.Dispose();        //リソースの開放
             }
@@ -580,8 +588,6 @@ namespace Archive
             }
         }
 
-
-
         //検索画面読み込み
         private void Search_Load(object sender, EventArgs e)
         {
@@ -766,6 +772,10 @@ namespace Archive
 
         }
 
-        
+        //Search.csから渡されたuserIdがテキストボックスに反映された時
+        private void use_id_Changed(object sender, EventArgs e)
+        {
+            userId = this.user_id.Text;
+        }
     }
 }
