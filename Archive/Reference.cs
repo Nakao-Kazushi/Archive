@@ -25,14 +25,109 @@ namespace Archive
             this.user_id.Visible = false;
 
             //利用状況表示画面の設定
-            UsageStateViewSetting();            
+            UsageStateViewSetting();
+        }
 
-            //TextBoxに表示された値を設定
-            userId = this.user_id.Text;
 
-            //テスト用（後で削除）
-            userId = "4";
+        //利用状況表示画面の設定メソッド
+        private void UsageStateViewSetting()
+        {
+            // DataGridView初期化（データクリア）
+            usageStateView.Columns.Clear();
 
+            //CheckBox列を追加する
+            DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
+            usageStateView.Columns.Add(column);
+
+            //ヘッダーとすべてのセルの内容に合わせて、列の幅を自動調整する
+            usageStateView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
+            usageStateView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
+
+
+        
+
+        private void RetturnButton_Clicked(object sender, EventArgs e)
+        {
+            //DBに接続する処理
+            string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
+
+            MySqlConnection cn = new MySqlConnection(sLogin);
+            DataTable dt = new DataTable();
+
+            //1つでも☑があるかの確認
+            bool Checked = false;
+
+            //行のカウント
+            for (int i = 0; i < usageStateView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)usageStateView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    Checked = true;
+                }
+            }
+
+            //1つも☑がなかった場合
+            if (!Checked)
+            {
+                MessageBox.Show("ERROR: １つ以上選択してください。");
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("返却しますか", "", MessageBoxButtons.OKCancel);
+
+            //「いいえ」を選んだ場合
+            if (result == DialogResult.Cancel) return;
+
+            //☑の入った書籍id
+            string book_ids = "''";
+
+            //☑のついてるidを取得
+            for (int i = 0; i < usageStateView.Rows.Count; i++)
+            {
+                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)usageStateView.Rows[i]).Cells[0]).Value;
+
+                if ((checkBox != null) && ((bool)checkBox == true))
+                {
+                    book_ids += ",'" + this.usageStateView.Rows[i].Cells[1].Value?.ToString() + "'";
+                }
+            }
+
+            string sql = "UPDATE books.books " +
+                "SET LOAN_DATE = NULL,RETURN_DATE = NULL,REQUEST_FLAG = 0,APPROVAL_FLAG = 0,USER_ID = 0 "+
+                "WHERE BOOK_ID IN (" + book_ids + ")";
+
+            //SQL文実行
+            MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
+
+            try
+            {
+                cn.Open();
+
+                da.Fill(dt);
+
+                MessageBox.Show("返却完了");
+
+                //DBとの接続をcloseする
+                cn.Close();
+
+                //データ更新する
+                ShowUsageState();
+                
+            }
+            catch (MySqlException me)
+            {
+                MessageBox.Show("ERROR: " + me.Message);
+            }
+        }
+
+        //データをDataGridViewに表示
+        private void ShowUsageState()
+        {
             //DBに接続する処理
             string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
 
@@ -97,118 +192,57 @@ namespace Archive
             usageStateView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             usageStateView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 
-            //☑以外を読み取り専用にする
+            
+
+            //☑以外を読み取り専用にする            
             usageStateView.Columns[1].ReadOnly = true;
             usageStateView.Columns[2].ReadOnly = true;
             usageStateView.Columns[3].ReadOnly = true;
             usageStateView.Columns[4].ReadOnly = true;
             usageStateView.Columns[5].ReadOnly = true;
 
+           
+
             //日付のフォーマット指定
             this.usageStateView.Columns[3].DefaultCellStyle.Format = "yyyy/MM/dd";
             this.usageStateView.Columns[4].DefaultCellStyle.Format = "yyyy/MM/dd";
         }
 
-        //利用状況表示画面の設定メソッド
-        private void UsageStateViewSetting()
+        //Login.csから渡されたuserIdがテキストボックスに反映された時
+        private void user_id_Changed(object sender, EventArgs e)
         {
-            // DataGridView初期化（データクリア）
-            usageStateView.Columns.Clear();
+            userId = this.user_id.Text;
 
-            //CheckBox列を追加する
-            DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
-            usageStateView.Columns.Add(column);
+            //データをDataGridViewに表示
+            ShowUsageState();            
+        }  
 
-            //ヘッダーとすべてのセルの内容に合わせて、列の幅を自動調整する
-            usageStateView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        ////申請中は☑不可にする
+        //private void UnableCheck()
+        //{
+        //    for (int i = 0; i < usageStateView.Rows.Count; i++)
+        //    {
+        //        if (this.usageStateView.Rows[i].Cells[5].Value?.ToString() == "申請中")
+        //        {
+        //            usageStateView[i,0].ReadOnly = true;
+        //        }
+        //    }
+        //}
 
-            //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
-            usageStateView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-        }
-
-
+        //書籍検索画面処理
         private void searchButton_Clicked(object sender, EventArgs e)
         {
             //検索画面を表示
             using (Search search = new Search())
             {
+                search.user_id.Text = userId;
                 search.ShowDialog();     //画面表示
                 search.Dispose();        //リソースの開放                
             }
 
         }
 
-        private void RetturnButton_Clicked(object sender, EventArgs e)
-        {
-            //DBに接続する処理
-            string sLogin = "server=localhost; database=books; userid=bks2; password=bksbooklist;";
 
-            MySqlConnection cn = new MySqlConnection(sLogin);
-            DataTable dt = new DataTable();
-
-            //1つでも☑があるかの確認
-            bool Checked = false;
-
-            //行のカウント
-            for (int i = 0; i < usageStateView.Rows.Count; i++)
-            {
-                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)usageStateView.Rows[i]).Cells[0]).Value;
-
-                if ((checkBox != null) && ((bool)checkBox == true))
-                {
-                    Checked = true;
-                }
-            }
-
-            //1つも☑がなかった場合
-            if (!Checked)
-            {
-                MessageBox.Show("ERROR: １つ以上選択してください。");
-                return;
-            }
-
-            //☑の入った書籍id
-            string book_ids = "''";
-
-            //☑のついてるidを取得
-            for (int i = 0; i < usageStateView.Rows.Count; i++)
-            {
-                Object checkBox = ((DataGridViewCheckBoxCell)((DataGridViewRow)usageStateView.Rows[i]).Cells[0]).Value;
-
-                if ((checkBox != null) && ((bool)checkBox == true))
-                {
-                    book_ids += ",'" + this.usageStateView.Rows[i].Cells[1].Value?.ToString() + "'";
-                }
-            }
-
-            string sql = "UPDATE books.books " +
-                "SET LOAN_DATE = NULL,RETURN_DATE = NULL,REQUEST_FLAG = 0,APPROVAL_FLAG = 0,USER_ID = 0 "+
-                "WHERE BOOK_ID IN (" + book_ids + ")";
-
-            //SQL文実行
-            MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
-
-            try
-            {
-                cn.Open();
-
-                da.Fill(dt);
-
-                MessageBox.Show("返却完了");
-
-                //DBとの接続をcloseする
-                cn.Close();
-
-                //データ更新する
-                
-            }
-            catch (MySqlException me)
-            {
-                MessageBox.Show("ERROR: " + me.Message);
-            }
-
-
-        }
     }
 
 }

@@ -43,6 +43,7 @@
             this.addButton = new System.Windows.Forms.Button();
             this.canBorrowCheckBox = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.user_id = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bookListView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -213,11 +214,20 @@
             this.label10.TabIndex = 24;
             this.label10.Text = "貸出可能のみ表示";
             // 
+            // user_id
+            // 
+            this.user_id.Location = new System.Drawing.Point(872, 47);
+            this.user_id.Name = "user_id";
+            this.user_id.Size = new System.Drawing.Size(100, 25);
+            this.user_id.TabIndex = 25;
+            this.user_id.TextChanged += new System.EventHandler(this.use_id_Changed);
+            // 
             // Search
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 540);
+            this.Controls.Add(this.user_id);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.canBorrowCheckBox);
             this.Controls.Add(this.addButton);
@@ -260,5 +270,6 @@
         public System.Windows.Forms.Button addButton;
         private System.Windows.Forms.CheckBox canBorrowCheckBox;
         private System.Windows.Forms.Label label10;
+        public System.Windows.Forms.TextBox user_id;
     }
 }

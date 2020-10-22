@@ -84,6 +84,7 @@
             this.user_id.Name = "user_id";
             this.user_id.Size = new System.Drawing.Size(100, 25);
             this.user_id.TabIndex = 4;
+            this.user_id.TextChanged += new System.EventHandler(this.user_id_Changed);
             // 
             // Reference
             // 
