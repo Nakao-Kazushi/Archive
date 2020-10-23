@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace Archive
 {
@@ -26,22 +19,29 @@ namespace Archive
             this.user_id.Visible = false;
         }
 
-        //英数字と_以外にマッチする
-        Regex reg = new Regex(@"[^0-9a-zA-Z_]");
+        //英数字と_以外
+        Regex regId = new Regex(@"[^0-9a-zA-Z_]");
 
-        //文字が入力されたときの処理
+        //#以外の記号
+        Regex regName = new Regex(@"[!-"":-@[$-/:-@[-`{-~ ]");
+
+
+        //書籍IDの禁則処理
         private void book_id_TextChanged(object sender, EventArgs e)
-        {
-            //カーソル位置
-            int i = this.book_id.SelectionStart;
-
-            //英数字_以外は消す
-            this.book_id.Text = reg.Replace(this.book_id.Text, "");
-
-            //カーソル位置を入力前の位置に戻す
+        {            
+            int i = this.book_id.SelectionStart;            
+            this.book_id.Text = regId.Replace(this.book_id.Text, "");            
             this.book_id.SelectionStart = i;
-        }     
-        
+        }
+
+        //書籍名の禁則処理
+        private void Book_name_TextChanged(object sender, EventArgs e)
+        {
+            int j = this.book_name.SelectionStart;
+            this.book_name.Text = regName.Replace(this.book_name.Text, "");
+            this.book_name.SelectionStart = j;
+        }
+
         //検索結果表示画面の設定メソッド
         private void BookListViewSetting()
         {
@@ -52,11 +52,10 @@ namespace Archive
             DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
             bookListView.Columns.Add(column);
 
-            //ヘッダーとすべてのセルの内容に合わせて、列の幅を自動調整する
-            bookListView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            bookListView.Columns[0].FillWeight = 40;
 
-            //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
-            bookListView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            //DataGridViewの表示幅に合わせて列幅自動調整
+            bookListView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         //チェックボックスのtrue,false判定-----------------------------------------------------------------------------
@@ -91,7 +90,8 @@ namespace Archive
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
             //SQL文作成
-            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
+            string sql = "START TRANSACTION; " +
+                         "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
                          "WHEN RETURN_DATE >= '" + DateTimeNow + "' THEN '貸出中' " +
@@ -164,8 +164,8 @@ namespace Archive
                         sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
                     }
                 }
-
             }
+            sql = sql +"; " + "COMMIT;";
 
             //処理実行
             DataTable dt = new DataTable();
@@ -185,14 +185,16 @@ namespace Archive
                 BookListViewSetting();
 
                 //画面表示用のDataGridViewに取得データを設定
-                bookListView.DataSource = dt;
-
-                //DBとの接続をcloseする
-                cn.Close();
+                bookListView.DataSource = dt;                
             }
             catch (MySqlException me)
             {
                 MessageBox.Show("ERROR: " + me.Message);
+            }
+            finally
+            {
+                //DBとの接続をcloseする
+                cn.Close();
             }
             // 検索画面で表示するカラム名を設定
             bookListView.Columns[0].HeaderText = "選択";
@@ -200,14 +202,7 @@ namespace Archive
             bookListView.Columns[2].HeaderText = "書籍名";
             bookListView.Columns[3].HeaderText = "貸出日";
             bookListView.Columns[4].HeaderText = "返却期日";
-            bookListView.Columns[5].HeaderText = "状態";
-
-            // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
-            bookListView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            bookListView.Columns[0].Width = 40;
-            bookListView.Columns[3].Width = 100;
-            bookListView.Columns[4].Width = 100;
-            bookListView.Columns[5].Width = 70;
+            bookListView.Columns[5].HeaderText = "状態";            
 
             //列幅をユーザーが変更できないようにする
             bookListView.Columns[0].Resizable = DataGridViewTriState.False;
@@ -230,7 +225,6 @@ namespace Archive
 
             //期限切れの行を着色する
             this.ExpiredRowsBackColorChange();
-
         }
 
         //期限切れの行を着色する
@@ -326,21 +320,11 @@ namespace Archive
                         }
                         r.requestGridView.Rows.Add(row);
                     }
-                }
-                // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
-                r.requestGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                r.requestGridView.Columns[0].Width = 40;
-                r.requestGridView.Columns[3].Width = 100;
-                r.requestGridView.Columns[4].Width = 100;
-                r.requestGridView.Columns[5].Width = 70;
+                }              
 
-                //申請画面の列幅をユーザーが変更できないようにする
-                r.requestGridView.Columns[0].Resizable = DataGridViewTriState.False;
-                r.requestGridView.Columns[3].Resizable = DataGridViewTriState.False;
-                r.requestGridView.Columns[4].Resizable = DataGridViewTriState.False;
-                r.requestGridView.Columns[5].Resizable = DataGridViewTriState.False;
-                r.requestGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                r.requestGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                r.requestGridView.Columns[0].FillWeight = 40;
+                //requestGridviewの表示幅に合わせてデータが出るようにする
+                r.requestGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
                 //申請画面で表示するカラム名を設定
                 r.requestGridView.Columns[0].HeaderText = "選択";
@@ -444,14 +428,9 @@ namespace Archive
                 //書籍名のみ編集可能に設定する
                 ed.editGridView.Columns[2].ReadOnly = false;
 
-                // カラム名の幅を設定(カラム名"選択"のセル以外自動調整)
-                ed.editGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                ed.editGridView.Columns[0].Width = 40;
-                ed.editGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                ed.editGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                ed.editGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                ed.editGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                ed.editGridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                ed.editGridView.Columns[0].FillWeight = 40;
+                //edidGridviewの表示幅に合わせてデータが出るようにする
+                ed.editGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
                 // 更新画面で表示するカラム名を設定
                 ed.editGridView.Columns[0].HeaderText = "選択";
@@ -485,24 +464,7 @@ namespace Archive
 
             //検索結果を更新           
             updateBookListView();
-        }
-
-        //private void approvalButton_Click(object sender, EventArgs e)
-        //{
-        //    //MessageBox.Show("承認ボタン");
-
-        //    //検索画面を表示
-        //    using (Approval a = new Approval())
-        //    {
-        //        a.ShowDialog();     //画面表示
-        //        a.Dispose();        //リソースの開放
-        //    }
-        //}
-
-        //private void AdduserButton_Click(object sender, EventArgs e)
-        //{
-
-        //}
+        }        
 
         //削除処理
 
@@ -553,7 +515,7 @@ namespace Archive
                 MySqlConnection cn = new MySqlConnection(sLogin);
 
                 //SQL文作成
-                string sql = "DELETE FROM books.books WHERE BOOK_ID IN (" + book_ids + ")";
+                string sql = "START TRANSACTION; " + "DELETE FROM books.books WHERE BOOK_ID IN (" + book_ids + "); " + "COMMIT;";
 
                 //処理実行
                 DataTable dt = new DataTable();
@@ -569,14 +531,16 @@ namespace Archive
                     //処理実行
                     cmd.ExecuteNonQuery();
 
-                    //DBとの接続をcloseする
-                    cmd.Connection.Close();
-
                     MessageBox.Show("削除完了");
                 }
                 catch (MySqlException me)
                 {
                     MessageBox.Show("ERROR: " + me.Message);
+                }
+                finally
+                {
+                    //DBとの接続をcloseする
+                    cmd.Connection.Close();                    
                 }
                 //検索結果を更新                       
                 updateBookListView();
@@ -591,6 +555,7 @@ namespace Archive
         //検索画面読み込み
         private void Search_Load(object sender, EventArgs e)
         {
+            
             adminiCheckBox.Visible = false;
 
             //管理者権限でログインしていない時(ユーザーの時)
@@ -622,7 +587,8 @@ namespace Archive
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
             //SQL文作成
-            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
+            string sql = "START TRANSACTION; " +
+                         "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
                          "WHEN RETURN_DATE >= '" + DateTimeNow + "' THEN '貸出中' " +
@@ -695,8 +661,8 @@ namespace Archive
                         sql = sql + "WHERE BOOK_NAME LIKE '%" + book_name + "%'";
                     }
                 }
-
             }
+            sql = sql + "; " + "COMMIT;";
 
             //処理実行
             DataTable dt = new DataTable();
@@ -714,14 +680,16 @@ namespace Archive
                 BookListViewSetting();
 
                 //画面表示用のDataGridViewに取得データを設定
-                bookListView.DataSource = dt;
-
-                //DBとの接続をcloseする
-                cn.Close();
+                bookListView.DataSource = dt;                
             }
             catch (MySqlException me)
             {
                 MessageBox.Show("ERROR: " + me.Message);
+            }
+            finally
+            {
+                //DBとの接続をcloseする
+                cn.Close();
             }
 
             //☑以外を読み取り専用にする
@@ -738,8 +706,6 @@ namespace Archive
             //期限切れの行を着色する
             this.ExpiredRowsBackColorChange();
         }
-
-
         private void canBorrowcheckBox_Changed(object sender, EventArgs e)
         {
             //貸出可能に☑が入っている時は、期限切れのチェックボックスを操作不可   
@@ -769,13 +735,12 @@ namespace Archive
             {
                 canBorrowCheckBox.Enabled = true;
             }
-
         }
 
         //Search.csから渡されたuserIdがテキストボックスに反映された時
         private void use_id_Changed(object sender, EventArgs e)
         {
             userId = this.user_id.Text;
-        }
+        }        
     }
 }

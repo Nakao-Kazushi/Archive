@@ -48,6 +48,9 @@
             // usageStateView
             // 
             this.usageStateView.AllowUserToAddRows = false;
+            this.usageStateView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.usageStateView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.usageStateView.Location = new System.Drawing.Point(44, 89);
             this.usageStateView.Name = "usageStateView";
@@ -56,9 +59,12 @@
             this.usageStateView.RowTemplate.Height = 27;
             this.usageStateView.Size = new System.Drawing.Size(906, 250);
             this.usageStateView.TabIndex = 1;
+            this.usageStateView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.UsageStateView_CellBeginEdit);
+            this.usageStateView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.usageStateView_DataBindingComplete);
             // 
             // retturnButton
             // 
+            this.retturnButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.retturnButton.Location = new System.Drawing.Point(687, 369);
             this.retturnButton.Name = "retturnButton";
             this.retturnButton.Size = new System.Drawing.Size(94, 42);
@@ -69,6 +75,7 @@
             // 
             // searchButton
             // 
+            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.searchButton.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.searchButton.Location = new System.Drawing.Point(801, 369);
             this.searchButton.Name = "searchButton";

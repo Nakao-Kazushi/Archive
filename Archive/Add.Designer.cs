@@ -40,6 +40,7 @@
             // 
             // add_button
             // 
+            this.add_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.add_button.Location = new System.Drawing.Point(592, 346);
             this.add_button.Margin = new System.Windows.Forms.Padding(4);
             this.add_button.Name = "add_button";
@@ -51,21 +52,28 @@
             // 
             // book_id
             // 
+            this.book_id.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.book_id.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.book_id.Location = new System.Drawing.Point(184, 128);
             this.book_id.Margin = new System.Windows.Forms.Padding(4);
             this.book_id.Name = "book_id";
             this.book_id.Size = new System.Drawing.Size(372, 25);
             this.book_id.TabIndex = 1;
-            this.book_id.TextChanged += new System.EventHandler(this.Book_idTextChanged);
+            this.book_id.TextChanged += new System.EventHandler(this.Book_id_TextChanged);
             // 
             // book_name
             // 
+            this.book_name.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.book_name.Location = new System.Drawing.Point(184, 176);
             this.book_name.Margin = new System.Windows.Forms.Padding(4);
             this.book_name.Name = "book_name";
             this.book_name.Size = new System.Drawing.Size(372, 25);
             this.book_name.TabIndex = 2;
+            this.book_name.TextChanged += new System.EventHandler(this.Book_name_TextChanged);
             // 
             // label1
             // 
@@ -89,6 +97,7 @@
             // 
             // searchButton
             // 
+            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.searchButton.Location = new System.Drawing.Point(592, 458);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4);
             this.searchButton.Name = "searchButton";
@@ -100,6 +109,8 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.label3.ForeColor = System.Drawing.Color.Red;
@@ -111,6 +122,8 @@
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("MS UI Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.label4.ForeColor = System.Drawing.Color.Red;

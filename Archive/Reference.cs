@@ -1,17 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Archive
 {
-   
+
     public partial class Reference : Form
     {      
         //ユーザーID
@@ -39,15 +34,11 @@ namespace Archive
             DataGridViewCheckBoxColumn column = new DataGridViewCheckBoxColumn();
             usageStateView.Columns.Add(column);
 
-            //ヘッダーとすべてのセルの内容に合わせて、列の幅を自動調整する
-            usageStateView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            usageStateView.Columns[0].FillWeight = 40;
 
-            //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
-            usageStateView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-        }
-
-
-        
+            //DataGridViewの表示幅に合わせて列幅自動調整
+            usageStateView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }        
 
         private void RetturnButton_Clicked(object sender, EventArgs e)
         {
@@ -97,9 +88,11 @@ namespace Archive
                 }
             }
 
-            string sql = "UPDATE books.books " +
-                "SET LOAN_DATE = NULL,RETURN_DATE = NULL,REQUEST_FLAG = 0,APPROVAL_FLAG = 0,USER_ID = 0 "+
-                "WHERE BOOK_ID IN (" + book_ids + ")";
+            string sql = "START TRANSACTION; " +
+                         "UPDATE books.books " +
+                         "SET LOAN_DATE = NULL,RETURN_DATE = NULL,REQUEST_FLAG = 0,APPROVAL_FLAG = 0,USER_ID = 0 "+
+                         "WHERE BOOK_ID IN (" + book_ids + "); " +
+                         "COMMIT;";
 
             //SQL文実行
             MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
@@ -110,19 +103,19 @@ namespace Archive
 
                 da.Fill(dt);
 
-                MessageBox.Show("返却完了");
-
-                //DBとの接続をcloseする
-                cn.Close();
-
-                //データ更新する
-                ShowUsageState();
-                
+                MessageBox.Show("返却完了");                             
             }
             catch (MySqlException me)
             {
                 MessageBox.Show("ERROR: " + me.Message);
             }
+            finally
+            {
+                //DBとの接続をcloseする
+                cn.Close();
+            }
+            //データ更新する
+            ShowUsageState();
         }
 
         //データをDataGridViewに表示
@@ -138,13 +131,15 @@ namespace Archive
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
             //SQL文作成
-            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
+            string sql = "START TRANSACTION; " +
+                         "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE , " +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
                          "WHEN RETURN_DATE >= '" + DateTimeNow + "' THEN '貸出中' " +
                          "ELSE ' ' END AS STATUS " +
                          "FROM books.books " +
-                         "WHERE USER_ID = " + userId;
+                         "WHERE USER_ID = " + userId + "; " +
+                         "COMMIT;";            
 
             //処理実行
             DataTable dt = new DataTable();
@@ -162,37 +157,25 @@ namespace Archive
                 UsageStateViewSetting();
 
                 //画面表示用のDataGridViewに取得データを設定
-                usageStateView.DataSource = dt;
-
-                //DBとの接続をcloseする
-                cn.Close();
+                usageStateView.DataSource = dt;                
             }
             catch (MySqlException me)
             {
                 MessageBox.Show("ERROR: " + me.Message);
             }
+            finally
+            {
+                //DBとの接続をcloseする
+                cn.Close();
+            }
+
             // 表示するカラム名を設定
             usageStateView.Columns[0].HeaderText = "選択";
             usageStateView.Columns[1].HeaderText = "書籍ID";
             usageStateView.Columns[2].HeaderText = "書籍名";
             usageStateView.Columns[3].HeaderText = "貸出日";
             usageStateView.Columns[4].HeaderText = "返却期日";
-            usageStateView.Columns[5].HeaderText = "状態";
-
-            usageStateView.Columns[0].FillWeight = 40;
-
-            //DataGridViewの表示幅に合わせて列幅自動調整
-            usageStateView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            //列幅をユーザーが変更できないようにする
-            usageStateView.Columns[0].Resizable = DataGridViewTriState.False;
-            usageStateView.Columns[3].Resizable = DataGridViewTriState.False;
-            usageStateView.Columns[4].Resizable = DataGridViewTriState.False;
-            usageStateView.Columns[5].Resizable = DataGridViewTriState.False;
-            usageStateView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            usageStateView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-
-            
+            usageStateView.Columns[5].HeaderText = "状態";                    
 
             //☑以外を読み取り専用にする            
             usageStateView.Columns[1].ReadOnly = true;
@@ -200,8 +183,6 @@ namespace Archive
             usageStateView.Columns[3].ReadOnly = true;
             usageStateView.Columns[4].ReadOnly = true;
             usageStateView.Columns[5].ReadOnly = true;
-
-           
 
             //日付のフォーマット指定
             this.usageStateView.Columns[3].DefaultCellStyle.Format = "yyyy/MM/dd";
@@ -215,19 +196,7 @@ namespace Archive
 
             //データをDataGridViewに表示
             ShowUsageState();            
-        }  
-
-        ////申請中は☑不可にする
-        //private void UnableCheck()
-        //{
-        //    for (int i = 0; i < usageStateView.Rows.Count; i++)
-        //    {
-        //        if (this.usageStateView.Rows[i].Cells[5].Value?.ToString() == "申請中")
-        //        {
-        //            usageStateView[i,0].ReadOnly = true;
-        //        }
-        //    }
-        //}
+        }       
 
         //書籍検索画面処理
         private void searchButton_Clicked(object sender, EventArgs e)
@@ -239,10 +208,30 @@ namespace Archive
                 search.ShowDialog();     //画面表示
                 search.Dispose();        //リソースの開放                
             }
-
         }
 
+        //申請中の行を☑できないようにする
+        private void UsageStateView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {            
+            if (usageStateView[5,e.RowIndex].Value?.ToString() == "申請中")//[列,行]
+            {                
+                //選択できないようにする
+                e.Cancel = true;
+                usageStateView.CancelEdit();
+            }
+        }
 
+        //申請中の行の☑を灰色にする
+        private void usageStateView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            for (int i = 0; i < usageStateView.Rows.Count; i++)
+            {
+                if (usageStateView[5, i].Value?.ToString() == "申請中")
+                {
+                    usageStateView[0, i].Style.BackColor = Color.LightGray;
+                }
+            }
+        }
     }
 
 }
