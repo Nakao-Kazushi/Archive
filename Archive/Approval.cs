@@ -28,13 +28,15 @@ namespace Archive
             DateTime dtn = DateTime.Now;
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
-            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
+            string sql = "START TRANSACTION; " +
+                         "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
                          "WHEN RETURN_DATE > '" + DateTimeNow + "' THEN '貸出中' " +
                          "ELSE ' ' END AS STATUS " +
                          "FROM books.books " +
-                         "WHERE REQUEST_FLAG = 1 ";
+                         "WHERE REQUEST_FLAG = 1 ; " +
+                         "COMMIT;";
 
             //処理実行
             DataTable dt = new DataTable();
@@ -54,11 +56,15 @@ namespace Archive
                 //画面表示用のDataGridViewに取得データを設定
                 approvalGridView.DataSource = dt;
 
-                cn.Close();
             }
             catch (MySqlException me)
             {
                 MessageBox.Show("ERROR: " + me.Message);
+            }
+            finally
+            {
+                //DBとの接続をcloseする
+                cn.Close();
             }
 
             //☑以外を読み取り専用にする
@@ -131,10 +137,12 @@ namespace Archive
                 {
                     Checked = true;
 
-                    sql = "UPDATE books.books " +
-                            "SET REQUEST_FLAG = '0' ," +
-                            "APPROVAL_FLAG = '1' " +
-                            "WHERE BOOK_ID = '" + approvalGridView.Rows[i].Cells[1].Value + "' ";
+                    sql = "START TRANSACTION; " +
+                          "UPDATE books.books " +
+                          "SET REQUEST_FLAG = '0' ," +
+                          "APPROVAL_FLAG = '1' " +
+                          "WHERE BOOK_ID = '" + approvalGridView.Rows[i].Cells[1].Value + "' ; "+
+                          "COMMIT;";
 
                     DataTable dt = new DataTable();
                     MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
@@ -143,11 +151,15 @@ namespace Archive
                     {
                         cn.Open();
                         da.Fill(dt);
-                        cn.Close();
                     }
                     catch (MySqlException me)
                     {
                         MessageBox.Show("ERROR: " + me.Message);
+                    }
+                    finally
+                    {
+                        //DBとの接続をcloseする
+                        cn.Close();
                     }
 
                     //☑以外を読み取り専用にする
@@ -200,13 +212,15 @@ namespace Archive
             DateTime dtn = DateTime.Now;
             string DateTimeNow = dtn.ToString("yyyy/MM/dd");
 
-            string sql = "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
+            string sql = "START TRANSACTION; " +
+                         "SELECT BOOK_ID ,BOOK_NAME ,LOAN_DATE ,RETURN_DATE ," +
                          "CASE WHEN REQUEST_FLAG = 1 THEN '申請中' " +
                          "WHEN RETURN_DATE < '" + DateTimeNow + "' THEN '期限切れ' " +
                          "WHEN RETURN_DATE > '" + DateTimeNow + "' THEN '貸出中' " +
                          "ELSE ' ' END AS STATUS " +
                          "FROM books.books " +
-                         "WHERE REQUEST_FLAG = 1 ";
+                         "WHERE REQUEST_FLAG = 1 ; " +
+                         "COMMIT;";
 
             //処理実行
             DataTable dt = new DataTable();
@@ -225,12 +239,15 @@ namespace Archive
 
                 //画面表示用のDataGridViewに取得データを設定
                 approvalGridView.DataSource = dt;
-
-                cn.Close();
             }
             catch (MySqlException me)
             {
                 MessageBox.Show("ERROR: " + me.Message);
+            }
+            finally
+            {
+                //DBとの接続をcloseする
+                cn.Close();
             }
 
             //☑以外を読み取り専用にする

@@ -22,7 +22,7 @@ namespace Archive
         //SQLインジェクション対策含む
         //英数字と_以外にマッチする
         Regex reg = new Regex(@"[^0-9a-zA-Z_]");
-        Regex regName = new Regex(@"[0-9a-zA-Z!-~]");  //左記の文字は入力不可
+        Regex regName = new Regex(@"[0-9!-/:-@[-`{-~]");  //左記の文字は入力不可
 
         //テキストボックス入力時の処理
         private void textChanged(object sender, EventArgs e)
@@ -92,7 +92,9 @@ namespace Archive
 
                     //SQL文実行
                     MySqlCommand cmd = new MySqlCommand(
-                                            "insert into user value ('" + userId + "','" + userName + "','" + userPw + "',0,'" + department + "')", cn);
+                                            "START TRANSACTION; " +
+                                            "insert into user value ('" + userId + "','" + userName + "','" + userPw + "',0,'" + department + "'); " +
+                                            "COMMIT;", cn);
                     try
                     {
                         //DBとの接続
@@ -100,9 +102,6 @@ namespace Archive
 
                         //処理実行
                         cmd.ExecuteNonQuery();
-
-                        //DBとの接続をcloseする
-                        cmd.Connection.Close();
 
                         MessageBox.Show("登録完了");
                     }
@@ -113,6 +112,11 @@ namespace Archive
                     catch (MySqlException me)
                     {
                         MessageBox.Show("ERROR: " + me.Message);
+                    }
+                    finally
+                    {
+                        //DBとの接続をcloseする
+                        cmd.Connection.Close();
                     }
                 }
                 else

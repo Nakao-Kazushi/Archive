@@ -74,13 +74,19 @@ namespace Archive
 
             if (!string.IsNullOrEmpty(department) && !string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(userPw))
             {
-                sql = "SELECT USER_ID FROM books.user " +
+                sql = "START TRANSACTION; " +
+                      "SELECT USER_ID FROM books.user " +
                       "WHERE USER_ID = '" + userId + "' AND USER_PW = '" + userPw + "' AND DEPARTMENT = '" + department + "' ";
                 
                 //管理者の☑が入っている時にSQL文に検索条件追加
                 if (Administrator == true)
                 {
-                    sql = sql + "AND ADMINISTRATOR_FLAG = '1'";            
+                    sql = sql + "AND ADMINISTRATOR_FLAG = '1'; " +
+                                "COMMIT;";
+                }
+                else
+                {
+                    sql = sql + "; COMMIT;";
                 }
                 
                 MySqlDataAdapter da = new MySqlDataAdapter(sql, cn);
@@ -89,7 +95,6 @@ namespace Archive
                 {
                     cn.Open();
                     da.Fill(dt);
-                    cn.Close();
 
                     int count = dt.Rows.Count;
 
@@ -131,6 +136,11 @@ namespace Archive
                 catch (MySqlException me)
                 {
                     MessageBox.Show("ERROR : " + me.Message);
+                }
+                finally
+                {
+                    //DBとの接続をcloseする
+                    cn.Close();
                 }
             }
             else
