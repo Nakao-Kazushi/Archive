@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace Archive
-{    
+{
     public partial class Add : Form
     {
         
@@ -22,21 +15,27 @@ namespace Archive
             InitializeComponent();
         }
 
-        //英数字と_以外にマッチする
-        Regex reg = new Regex(@"[^0-9a-zA-Z_]");
+        //英数字と_以外
+        Regex regId = new Regex(@"[^0-9a-zA-Z_]");
 
-        //文字が入力されたときの処理
-        private void Book_idTextChanged(object sender, EventArgs e)
+        //#以外の記号
+        Regex regName = new Regex(@"[!-"":-@[$-/:-@[-`{-~ ]");
+
+        //書籍IDの禁則処理
+        private void Book_id_TextChanged(object sender, EventArgs e)
+        {            
+            int i = this.book_id.SelectionStart;           
+            this.book_id.Text = regId.Replace(this.book_id.Text, "");                      
+            this.book_id.SelectionStart = i;                   
+        }
+
+        //書籍名の禁則処理
+        private void Book_name_TextChanged(object sender, EventArgs e)
         {
-            //カーソル位置
-            int i = this.book_id.SelectionStart;
-
-            //英数字_以外は消す
-            this.book_id.Text = reg.Replace(this.book_id.Text, "");
-
-            //カーソル位置を入力前の位置に戻す
-            this.book_id.SelectionStart = i;
-        }        
+            int j = this.book_name.SelectionStart;
+            this.book_name.Text = regName.Replace(this.book_name.Text, "");
+            this.book_name.SelectionStart = j;
+        }
 
         //「登録」ボタン押下した後の処理
         private void addButtonClicked(object sender, EventArgs e)
@@ -59,7 +58,7 @@ namespace Archive
             if ((!string.IsNullOrEmpty(book_id)) && (!string.IsNullOrEmpty(book_name)))
             {              
                 //SQL文実行
-                MySqlCommand cmd = new MySqlCommand("insert into books value ('" + book_id + "','" + book_name + "',null,null,0,0,0)", cn);
+                MySqlCommand cmd = new MySqlCommand("START TRANSACTION; " + "insert into books value ('" + book_id + "','" + book_name + "',null,null,0,0,0); " + "COMMIT;", cn);
 
                 try
                 {
@@ -72,10 +71,7 @@ namespace Archive
                     //DBとの接続をcloseする
                     cmd.Connection.Close();
 
-                    MessageBox.Show("登録完了");
-
-                    //登録画面を閉じる
-                    this.Close();
+                    MessageBox.Show("登録完了");                   
                 }
                 catch (MySqlException me)when(me.Message.Contains("Duplicate entry"))//重複エラー
                 {                    
@@ -85,6 +81,11 @@ namespace Archive
                 {
                     MessageBox.Show("ERROR: " + me.Message);
                 }
+                finally
+                {
+                    //登録画面を閉じる
+                    this.Close();
+                }
             }
             else
             {
@@ -93,16 +94,7 @@ namespace Archive
         }
 
         private void searchButton_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("検索ボタン");
-
-            ////検索画面を表示
-            //using (Search s = new Search())
-            //{
-            //    s.ShowDialog();     //画面表示
-            //    s.Dispose();        //リソースの開放
-            //}
-
+        {           
             //登録ボタンを閉じる
             this.Close();
         }       

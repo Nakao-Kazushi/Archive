@@ -69,6 +69,7 @@
             // 
             // book_id
             // 
+            this.book_id.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.book_id.Location = new System.Drawing.Point(131, 50);
             this.book_id.Margin = new System.Windows.Forms.Padding(4);
             this.book_id.Name = "book_id";
@@ -83,6 +84,7 @@
             this.book_name.Name = "book_name";
             this.book_name.Size = new System.Drawing.Size(148, 25);
             this.book_name.TabIndex = 2;
+            this.book_name.TextChanged += new System.EventHandler(this.Book_name_TextChanged);
             // 
             // expiredCheckBox
             // 
