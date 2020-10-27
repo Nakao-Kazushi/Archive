@@ -337,7 +337,7 @@ namespace Archive
                 r.requestGridView.AllowUserToAddRows = false;
                 r.requestGridView.Refresh();
 
-                //Request.user_id.Text = userId;//山本さんコメントを解除して使ってください！！
+                r.user_id.Text = userId;
 
                 r.ShowDialog();     //画面表示
                 r.Dispose();        //リソースの開放
