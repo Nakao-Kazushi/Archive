@@ -31,6 +31,7 @@
             this.requestButton = new System.Windows.Forms.Button();
             this.requestGridView = new System.Windows.Forms.DataGridView();
             this.returnButton = new System.Windows.Forms.Button();
+            this.user_id = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.requestGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,9 +72,18 @@
             this.returnButton.UseVisualStyleBackColor = true;
             this.returnButton.Click += new System.EventHandler(this.returnButton_Click);
             // 
+            // user_id
+            // 
+            this.user_id.Location = new System.Drawing.Point(56, 365);
+            this.user_id.Name = "user_id";
+            this.user_id.Size = new System.Drawing.Size(48, 22);
+            this.user_id.TabIndex = 3;
+            this.user_id.TextChanged += new System.EventHandler(this.user_id_Changed);
+            // 
             // Request
             // 
             this.ClientSize = new System.Drawing.Size(748, 430);
+            this.Controls.Add(this.user_id);
             this.Controls.Add(this.returnButton);
             this.Controls.Add(this.requestGridView);
             this.Controls.Add(this.requestButton);
@@ -81,16 +91,15 @@
             this.Text = "申請画面";
             ((System.ComponentModel.ISupportInitialize)(this.requestGridView)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
         public System.Windows.Forms.DataGridView requestGridView;
         private System.Windows.Forms.Button requestButton;
         private System.Windows.Forms.Button returnButton;
+        public System.Windows.Forms.TextBox user_id;
     }
 }

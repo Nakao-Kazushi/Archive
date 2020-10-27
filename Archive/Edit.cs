@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
 
 namespace Archive
 {
@@ -16,13 +17,6 @@ namespace Archive
         public Edit()
         {
             InitializeComponent();
-
-            //ヘッダーとすべてのセルの内容に合わせて、列の幅を自動調整する
-            editGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-            //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
-            editGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
         }
 
         private void editButton_Click(object sender, EventArgs e)
@@ -30,7 +24,7 @@ namespace Archive
             //ダイアログ表示
             DialogResult result = MessageBox.Show("更新しますか？", "", MessageBoxButtons.OKCancel);
 
-            //「いいえ」を選んだ場合
+            //「いいえ」を選んだ場合は処理を行わない
             if (result == DialogResult.Cancel) return;
 
             //DBに接続する処理
@@ -76,21 +70,29 @@ namespace Archive
                 //書名が入力されている場合は処理開始
                 if (!string.IsNullOrEmpty(bookname))
                 {
-                    //貸出日と返却期日に日付が入っている(=貸出中 or 期限切れ)場合はすべて更新
-                    if ((!string.IsNullOrEmpty((editGridView.Rows[i].Cells[3].Value).ToString())) && (!string.IsNullOrEmpty((editGridView.Rows[i].Cells[4].Value).ToString())))
+
+                    //#以外の記号
+                    //Regex regName = new Regex(@"[!-"":-@[$-/:-@[-`{-~ ]");
+
+                    bool halfWidthSymbol = (Regex.IsMatch(bookname, @"[!-"":-@[$-/:-@[-`{-~ ]"));
+
+                    // 入力された値に特別な記号が入ってないかどうかチェックする。
+                    if (halfWidthSymbol == true)
                     {
-                        sql = "UPDATE books.books " +
-                              "SET BOOK_NAME = '" + editGridView.Rows[i].Cells[2].Value + "' , " +
-                              "LOAN_DATE = '" + editGridView.Rows[i].Cells[3].Value + "' , " +
-                              "RETURN_DATE = '" + editGridView.Rows[i].Cells[4].Value + "' " +
-                              "WHERE BOOK_ID = '" + bookIdList[i] + "' ";
+                        MessageBox.Show("ERROR: 書籍名に半角記号が入力されています。書籍名は全角で入力してください。" );
+                        return;
                     }
-                    //貸出日と返却期日に日付が入っていない(=貸出されていない)場合は書籍名のみ更新
-                    else if ((string.IsNullOrEmpty((editGridView.Rows[i].Cells[3].Value).ToString())) && (string.IsNullOrEmpty((editGridView.Rows[i].Cells[4].Value).ToString())))
+
+
+                    //貸出日と返却期日に日付が入っていない(=貸出されていない)場合、書籍名のみ更新
+                    /*else */
+                    if ((string.IsNullOrEmpty((editGridView.Rows[i].Cells[3].Value).ToString())) && (string.IsNullOrEmpty((editGridView.Rows[i].Cells[4].Value).ToString())))
                     {
-                        sql = "UPDATE books.books " +
+                        sql = "START TRANSACTION; " +
+                              "UPDATE books.books " +
                               "SET BOOK_NAME = '" + editGridView.Rows[i].Cells[2].Value + "' " +
-                              "WHERE BOOK_ID = '" + bookIdList[i] + "' ";
+                              "WHERE BOOK_ID = '" + bookIdList[i] + "' " +
+                              "; COMMIT;";
                     }
 
                     //SQL文実行
@@ -101,24 +103,23 @@ namespace Archive
                         cn.Open();
 
                         da.Fill(dt);
-
-                        Console.WriteLine("更新完了");
-
-                        //DBとの接続をcloseする
-                        cn.Close();
-
-                        //編集画面を閉じる
-                        this.Close();
                     }
                     catch (MySqlException me)
                     {
                         MessageBox.Show("ERROR: " + me.Message);
                     }
+                    finally
+                    {
+                        //DBとの接続をcloseする
+                        cn.Close();
+                    }
+                    //編集画面を閉じる
+                    this.Close();
                 }
                 else
                 {
                     MessageBox.Show("ERROR: 書名が未入力です。");
-                    break;
+                    return;
                 }
             }
 
