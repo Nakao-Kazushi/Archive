@@ -58,8 +58,7 @@
             this.usageStateView.RowHeadersWidth = 62;
             this.usageStateView.RowTemplate.Height = 27;
             this.usageStateView.Size = new System.Drawing.Size(906, 250);
-            this.usageStateView.TabIndex = 1;
-            this.usageStateView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.UsageStateView_CellBeginEdit);
+            this.usageStateView.TabIndex = 1;         
             this.usageStateView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.usageStateView_DataBindingComplete);
             // 
             // retturnButton
