@@ -202,15 +202,7 @@ namespace Archive
             bookListView.Columns[2].HeaderText = "書籍名";
             bookListView.Columns[3].HeaderText = "貸出日";
             bookListView.Columns[4].HeaderText = "返却期日";
-            bookListView.Columns[5].HeaderText = "状態";            
-
-            //列幅をユーザーが変更できないようにする
-            bookListView.Columns[0].Resizable = DataGridViewTriState.False;
-            bookListView.Columns[3].Resizable = DataGridViewTriState.False;
-            bookListView.Columns[4].Resizable = DataGridViewTriState.False;
-            bookListView.Columns[5].Resizable = DataGridViewTriState.False;
-            bookListView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            bookListView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            bookListView.Columns[5].HeaderText = "状態";       
 
             //☑以外を読み取り専用にする
             bookListView.Columns[1].ReadOnly = true;
@@ -378,7 +370,7 @@ namespace Archive
                 return;
             }
 
-            MessageBox.Show("編集ボタン");
+            MessageBox.Show("編集画面表示します");
 
 
             //更新用画面を表示
@@ -691,6 +683,14 @@ namespace Archive
                 //DBとの接続をcloseする
                 cn.Close();
             }
+
+            // 検索画面で表示するカラム名を設定
+            bookListView.Columns[0].HeaderText = "選択";
+            bookListView.Columns[1].HeaderText = "書籍ID";
+            bookListView.Columns[2].HeaderText = "書籍名";
+            bookListView.Columns[3].HeaderText = "貸出日";
+            bookListView.Columns[4].HeaderText = "返却期日";
+            bookListView.Columns[5].HeaderText = "状態";
 
             //☑以外を読み取り専用にする
             bookListView.Columns[1].ReadOnly = true;

@@ -66,31 +66,33 @@ namespace Archive
                     cmd.Connection.Open();
 
                     //処理実行
-                    cmd.ExecuteNonQuery();
-
-                    //DBとの接続をcloseする
-                    cmd.Connection.Close();
+                    cmd.ExecuteNonQuery();                    
 
                     MessageBox.Show("登録完了");                   
                 }
                 catch (MySqlException me)when(me.Message.Contains("Duplicate entry"))//重複エラー
                 {                    
-                    MessageBox.Show("このIDは既に登録されています", "", MessageBoxButtons.OK, MessageBoxIcon.Error);                                       
+                    MessageBox.Show("このIDは既に登録されています", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 catch(MySqlException me)
                 {
                     MessageBox.Show("ERROR: " + me.Message);
+                    return;
                 }
                 finally
                 {
-                    //登録画面を閉じる
-                    this.Close();
+                    //DBとの接続をcloseする
+                    cmd.Connection.Close();                    
                 }
+            //登録ボタンを閉じる
+            this.Close();
             }
             else
             {
                 MessageBox.Show("登録失敗");
             }
+           
         }
 
         private void searchButton_Click(object sender, EventArgs e)
