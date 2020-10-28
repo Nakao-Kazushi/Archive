@@ -22,6 +22,9 @@ namespace Archive
 
             //user_idテキストボックスを非表示
             this.user_id.Visible = false;
+
+            //ヘッダーとすべてのセルの内容に合わせて、行の高さを自動調整する
+            requestGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
         //requestGridViewのセルがクリックされたときの処理
@@ -31,18 +34,22 @@ namespace Archive
             DateTimePicker dateTimePicker = new DateTimePicker();
             dateTimePicker.Format = DateTimePickerFormat.Short;
 
+            requestGridView.Columns[1].ReadOnly = true;
+            requestGridView.Columns[2].ReadOnly = true;
+            requestGridView.Columns[5].ReadOnly = true;
+
             //カレンダーのサイズと表示位置の設定
             Rectangle oRectangle = requestGridView.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true);
             dateTimePicker.Size = new Size(oRectangle.Width, oRectangle.Height);
             dateTimePicker.Location = new Point(oRectangle.X, oRectangle.Y);
 
-            // 画面サイズを変更可能にする
+            //画面サイズを変更可能にする
             this.FormBorderStyle = FormBorderStyle.Sizable;
 
             //貸出日のセル(3)と返却期日のセル(4)がクリックされたときのみ実行
             if (e.ColumnIndex == 3 || e.ColumnIndex == 4)
             {
-                // 画面サイズを変更できないようにする
+                //画面サイズを変更できないようにする
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
 
                 if (e.RowIndex >= 0)
@@ -58,9 +65,7 @@ namespace Archive
                     requestGridView.CurrentRow.Cells[e.ColumnIndex].Value = dateTimePicker.Value.ToShortDateString();
                 }
             }
-            requestGridView.Columns[1].ReadOnly = true;
-            requestGridView.Columns[2].ReadOnly = true;
-            requestGridView.Columns[5].ReadOnly = true;
+            
             dateTimePicker.CloseUp += new System.EventHandler(this.dateTimePicker_CloseUp);
         }
 
@@ -85,8 +90,11 @@ namespace Archive
             //ダイアログ表示
             DialogResult result = MessageBox.Show("申請しますか？", "", MessageBoxButtons.OKCancel);
 
-            //「いいえ」を選んだ場合
-            if (result == DialogResult.Cancel) return;
+            //「いいえ」を選んだ場合は処理を行わない
+            if (result == DialogResult.Cancel)
+            {
+                return;
+            }
 
             //現在日付取得
             DateTime dtn = DateTime.Now;
@@ -134,13 +142,13 @@ namespace Archive
                 //返却期日
                 string returnDate = requestGridView.Rows[i].Cells[4].Value.ToString();
 
-                //貸出日・返却期日の両方がnullもしくは空ではないなら処理実行
+                //貸出日・返却期日の両方がnullもしくは空ではないなら処理を行う
                 if ((!string.IsNullOrEmpty(loanDate)) && (!string.IsNullOrEmpty(returnDate)))
                 {
                     //返却期日が貸出日より過去の日付になっていないか確認
                     if ((-1 == string.Compare(loanDate, returnDate)))
                     {
-                        //貸出日が今日or今日より未来の日付なら処理実行
+                        //貸出日が今日or今日より未来の日付なら処理を行う
                         if ((-1 == string.Compare(DateTimeNow, loanDate)) || (0 == string.Compare(DateTimeNow, loanDate)))
                         {
                             sql = "START TRANSACTION; " +
@@ -176,16 +184,19 @@ namespace Archive
                         else
                         {
                             MessageBox.Show("ERROR: 貸出日は今日以降の日付で設定してください。");
+                            return;
                         }
                     }
                     else
                     {
                         MessageBox.Show("ERROR: 返却期日を貸出日以降の日付で設定してください。");
+                        return;
                     }
                 }
                 else
                 {
                     MessageBox.Show("ERROR: 貸出日と返却期日を設定してください。");
+                    return;
                 }
             }
             

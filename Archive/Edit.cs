@@ -70,22 +70,16 @@ namespace Archive
                 //書名が入力されている場合は処理開始
                 if (!string.IsNullOrEmpty(bookname))
                 {
-
-                    //#以外の記号
-                    //Regex regName = new Regex(@"[!-"":-@[$-/:-@[-`{-~ ]");
-
                     bool halfWidthSymbol = (Regex.IsMatch(bookname, @"[!-"":-@[$-/:-@[-`{-~ ]"));
 
-                    // 入力された値に特別な記号が入ってないかどうかチェックする。
+                    //入力された値に特別な記号が入ってないかどうかチェックする。
                     if (halfWidthSymbol == true)
                     {
                         MessageBox.Show("ERROR: 書籍名に半角記号が入力されています。書籍名は全角で入力してください。" );
                         return;
                     }
 
-
                     //貸出日と返却期日に日付が入っていない(=貸出されていない)場合、書籍名のみ更新
-                    /*else */
                     if ((string.IsNullOrEmpty((editGridView.Rows[i].Cells[3].Value).ToString())) && (string.IsNullOrEmpty((editGridView.Rows[i].Cells[4].Value).ToString())))
                     {
                         sql = "START TRANSACTION; " +
@@ -122,7 +116,7 @@ namespace Archive
                     return;
                 }
             }
-
+            MessageBox.Show("更新完了 ");
         }
 
         private void returnButton_Click(object sender, EventArgs e)

@@ -38,7 +38,7 @@
             // requestButton
             // 
             this.requestButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.requestButton.Location = new System.Drawing.Point(446, 365);
+            this.requestButton.Location = new System.Drawing.Point(480, 388);
             this.requestButton.Name = "requestButton";
             this.requestButton.Size = new System.Drawing.Size(75, 30);
             this.requestButton.TabIndex = 1;
@@ -57,14 +57,14 @@
             this.requestGridView.RowHeadersVisible = false;
             this.requestGridView.RowHeadersWidth = 51;
             this.requestGridView.RowTemplate.Height = 24;
-            this.requestGridView.Size = new System.Drawing.Size(561, 293);
+            this.requestGridView.Size = new System.Drawing.Size(595, 316);
             this.requestGridView.TabIndex = 0;
             this.requestGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.requestGridView_CellClick);
             // 
             // returnButton
             // 
             this.returnButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.returnButton.Location = new System.Drawing.Point(542, 365);
+            this.returnButton.Location = new System.Drawing.Point(576, 388);
             this.returnButton.Name = "returnButton";
             this.returnButton.Size = new System.Drawing.Size(75, 30);
             this.returnButton.TabIndex = 2;
@@ -82,11 +82,12 @@
             // 
             // Request
             // 
-            this.ClientSize = new System.Drawing.Size(748, 430);
+            this.ClientSize = new System.Drawing.Size(782, 453);
             this.Controls.Add(this.user_id);
             this.Controls.Add(this.returnButton);
             this.Controls.Add(this.requestGridView);
             this.Controls.Add(this.requestButton);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Request";
             this.Text = "申請画面";
             ((System.ComponentModel.ISupportInitialize)(this.requestGridView)).EndInit();
