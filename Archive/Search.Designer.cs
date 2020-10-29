@@ -60,7 +60,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(352, 54);
+            this.label2.Location = new System.Drawing.Point(432, 54);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 18);
@@ -72,17 +72,21 @@
             this.book_id.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.book_id.Location = new System.Drawing.Point(131, 50);
             this.book_id.Margin = new System.Windows.Forms.Padding(4);
+            this.book_id.MinimumSize = new System.Drawing.Size(200, 18);
             this.book_id.Name = "book_id";
-            this.book_id.Size = new System.Drawing.Size(135, 25);
+            this.book_id.Size = new System.Drawing.Size(200, 25);
             this.book_id.TabIndex = 1;
             this.book_id.TextChanged += new System.EventHandler(this.book_id_TextChanged);
             // 
             // book_name
             // 
-            this.book_name.Location = new System.Drawing.Point(440, 50);
+            this.book_name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.book_name.Location = new System.Drawing.Point(520, 50);
             this.book_name.Margin = new System.Windows.Forms.Padding(4);
+            this.book_name.MinimumSize = new System.Drawing.Size(200, 18);
             this.book_name.Name = "book_name";
-            this.book_name.Size = new System.Drawing.Size(148, 25);
+            this.book_name.Size = new System.Drawing.Size(200, 25);
             this.book_name.TabIndex = 2;
             this.book_name.TextChanged += new System.EventHandler(this.Book_name_TextChanged);
             // 
@@ -110,7 +114,7 @@
             // searchButton
             // 
             this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchButton.Location = new System.Drawing.Point(676, 98);
+            this.searchButton.Location = new System.Drawing.Point(735, 106);
             this.searchButton.Margin = new System.Windows.Forms.Padding(4);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(134, 44);
@@ -122,7 +126,7 @@
             // requestButton
             // 
             this.requestButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.requestButton.Location = new System.Drawing.Point(66, 466);
+            this.requestButton.Location = new System.Drawing.Point(35, 466);
             this.requestButton.Margin = new System.Windows.Forms.Padding(4);
             this.requestButton.Name = "requestButton";
             this.requestButton.Size = new System.Drawing.Size(94, 42);
@@ -162,14 +166,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bookListView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.bookListView.Location = new System.Drawing.Point(66, 194);
+            this.bookListView.Location = new System.Drawing.Point(36, 194);
             this.bookListView.Margin = new System.Windows.Forms.Padding(4);
+            this.bookListView.MinimumSize = new System.Drawing.Size(735, 100);
             this.bookListView.Name = "bookListView";
             this.bookListView.RowHeadersVisible = false;
             this.bookListView.RowHeadersWidth = 51;
             this.bookListView.RowTemplate.Height = 24;
             this.bookListView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.bookListView.Size = new System.Drawing.Size(906, 264);
+            this.bookListView.Size = new System.Drawing.Size(929, 264);
             this.bookListView.TabIndex = 19;
             this.bookListView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.bookListView_CellValueChanged);
             this.bookListView.CurrentCellDirtyStateChanged += new System.EventHandler(this.bookListView_CurrentCellDirtyStateChanged);
@@ -178,7 +183,7 @@
             // adminiCheckBox
             // 
             this.adminiCheckBox.AutoSize = true;
-            this.adminiCheckBox.Location = new System.Drawing.Point(34, 476);
+            this.adminiCheckBox.Location = new System.Drawing.Point(12, 476);
             this.adminiCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.adminiCheckBox.Name = "adminiCheckBox";
             this.adminiCheckBox.Size = new System.Drawing.Size(22, 21);
@@ -246,6 +251,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Search";
             this.Text = "書籍検索画面";
             this.Load += new System.EventHandler(this.Search_Load);

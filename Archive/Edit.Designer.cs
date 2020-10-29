@@ -46,13 +46,13 @@
             this.editGridView.RowHeadersVisible = false;
             this.editGridView.RowHeadersWidth = 51;
             this.editGridView.RowTemplate.Height = 24;
-            this.editGridView.Size = new System.Drawing.Size(563, 332);
+            this.editGridView.Size = new System.Drawing.Size(712, 332);
             this.editGridView.TabIndex = 1;
             // 
             // editButton
             // 
             this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.editButton.Location = new System.Drawing.Point(391, 424);
+            this.editButton.Location = new System.Drawing.Point(540, 424);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(75, 30);
             this.editButton.TabIndex = 2;
@@ -63,7 +63,7 @@
             // returnButton
             // 
             this.returnButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.returnButton.Location = new System.Drawing.Point(520, 424);
+            this.returnButton.Location = new System.Drawing.Point(669, 424);
             this.returnButton.Name = "returnButton";
             this.returnButton.Size = new System.Drawing.Size(75, 30);
             this.returnButton.TabIndex = 3;
@@ -75,10 +75,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(633, 507);
+            this.ClientSize = new System.Drawing.Size(782, 507);
             this.Controls.Add(this.returnButton);
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.editGridView);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Edit";
             this.Text = "更新画面";
             ((System.ComponentModel.ISupportInitialize)(this.editGridView)).EndInit();

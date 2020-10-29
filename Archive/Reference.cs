@@ -38,6 +38,9 @@ namespace Archive
 
             //DataGridViewの表示幅に合わせて列幅自動調整
             usageStateView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            //選択モードを行単位での選択のみにする
+            usageStateView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }        
 
         private void RetturnButton_Clicked(object sender, EventArgs e)
@@ -208,20 +211,10 @@ namespace Archive
                 search.ShowDialog();     //画面表示
                 search.Dispose();        //リソースの開放                
             }
+            ShowUsageState();
         }
-
-        //申請中の行を☑できないようにする
-        private void UsageStateView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-        {            
-            if (usageStateView[5,e.RowIndex].Value?.ToString() == "申請中")//[列,行]
-            {                
-                //選択できないようにする
-                e.Cancel = true;
-                usageStateView.CancelEdit();
-            }
-        }
-
-        //申請中の行の☑を灰色にする
+       
+        //申請中の行の☑を灰色・操作不可にする
         private void usageStateView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             for (int i = 0; i < usageStateView.Rows.Count; i++)
@@ -229,6 +222,7 @@ namespace Archive
                 if (usageStateView[5, i].Value?.ToString() == "申請中")
                 {
                     usageStateView[0, i].Style.BackColor = Color.LightGray;
+                    usageStateView[0, i].ReadOnly = true;
                 }
             }
         }
