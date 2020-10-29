@@ -211,6 +211,7 @@ namespace Archive
                 search.ShowDialog();     //画面表示
                 search.Dispose();        //リソースの開放                
             }
+            ShowUsageState();
         }
        
         //申請中の行の☑を灰色・操作不可にする
