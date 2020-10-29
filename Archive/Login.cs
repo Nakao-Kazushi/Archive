@@ -21,8 +21,9 @@ namespace Archive
         }
 
         //英数字と_以外にマッチする
-        Regex reg = new Regex(@"[^0-9a-zA-Z_]");
-
+        Regex regId = new Regex(@"[^0-9_]");
+        Regex regPw = new Regex(@"[^0-9a-zA-Z_]");
+        
         //禁則文字チェック
         private void userIdTextChanged(object sender, EventArgs e)
         {
@@ -30,7 +31,7 @@ namespace Archive
             int i = this.user_id.SelectionStart;
 
             //英数字_以外は消す
-            this.user_id.Text = reg.Replace(this.user_id.Text, "");
+            this.user_id.Text = regId.Replace(this.user_id.Text, "");
 
             //カーソル位置を入力前の位置に戻す
             this.user_id.SelectionStart = i;
@@ -43,7 +44,7 @@ namespace Archive
             int i = this.user_pw.SelectionStart;
 
             //英数字_以外は消す
-            this.user_pw.Text = reg.Replace(this.user_pw.Text, "");
+            this.user_pw.Text = regPw.Replace(this.user_pw.Text, "");
 
             //カーソル位置を入力前の位置に戻す
             this.user_pw.SelectionStart = i;
@@ -165,7 +166,7 @@ namespace Archive
             //部署、ユーザーID,パスワードがすべて未入力の場合
             if (string.IsNullOrEmpty(department) & string.IsNullOrEmpty(userId) & string.IsNullOrEmpty(userPw))
             {
-                MessageBox.Show("すべての必要項目を入力してください。");
+                MessageBox.Show("必要項目を入力してください。");
             }
 
             //2箇所未入力があったときのエラー-------------------------------------------------------------------------------------
@@ -185,7 +186,7 @@ namespace Archive
             //1箇所未入力の場合-------------------------------------------------------------------------------------
             else if (string.IsNullOrEmpty(department))
             {
-                MessageBox.Show("部署が未入力です。");
+                MessageBox.Show("部署を選択してください。");
             }
             else if (string.IsNullOrEmpty(userId))
             {

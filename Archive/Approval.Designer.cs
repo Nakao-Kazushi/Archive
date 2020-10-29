@@ -46,13 +46,13 @@
             this.approvalGridView.RowHeadersVisible = false;
             this.approvalGridView.RowHeadersWidth = 51;
             this.approvalGridView.RowTemplate.Height = 24;
-            this.approvalGridView.Size = new System.Drawing.Size(733, 287);
+            this.approvalGridView.Size = new System.Drawing.Size(733, 290);
             this.approvalGridView.TabIndex = 0;
             // 
             // ApprovalButton
             // 
             this.ApprovalButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ApprovalButton.Location = new System.Drawing.Point(606, 359);
+            this.ApprovalButton.Location = new System.Drawing.Point(606, 362);
             this.ApprovalButton.Name = "ApprovalButton";
             this.ApprovalButton.Size = new System.Drawing.Size(75, 45);
             this.ApprovalButton.TabIndex = 1;
@@ -63,7 +63,7 @@
             // SearchButton
             // 
             this.SearchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.SearchButton.Location = new System.Drawing.Point(687, 359);
+            this.SearchButton.Location = new System.Drawing.Point(687, 362);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(86, 45);
             this.SearchButton.TabIndex = 2;
@@ -75,10 +75,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 453);
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.ApprovalButton);
             this.Controls.Add(this.approvalGridView);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Approval";
             this.Text = "承認画面";
             ((System.ComponentModel.ISupportInitialize)(this.approvalGridView)).EndInit();
