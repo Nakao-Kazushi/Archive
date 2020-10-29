@@ -326,6 +326,14 @@ namespace Archive
                 r.requestGridView.Columns[4].HeaderText = "返却期日";
                 r.requestGridView.Columns[5].HeaderText = "状態";
 
+                //申請画面のソートモードを解除する
+                r.requestGridView.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                r.requestGridView.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                r.requestGridView.Columns[2].SortMode = DataGridViewColumnSortMode.NotSortable;
+                r.requestGridView.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+                r.requestGridView.Columns[4].SortMode = DataGridViewColumnSortMode.NotSortable;
+                r.requestGridView.Columns[5].SortMode = DataGridViewColumnSortMode.NotSortable;
+
                 r.requestGridView.AllowUserToAddRows = false;
                 r.requestGridView.Refresh();
 
